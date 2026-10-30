@@ -1,0 +1,246 @@
+---
+// 成绩试算示意界面：添加拟修课程 → 试算累计绩点变化 / 倒推目标成绩。
+// 依据 README：不修改原成绩。
+---
+
+<div class="app mock-sim">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">成绩试算</div>
+      <div class="app-sub">试算不改动已保存的成绩</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip">2026 秋</span>
+  </div>
+
+  <div class="app-body sim">
+    <div class="result">
+      <div class="gpa">
+        <div class="g">
+          <em>3.72</em>
+          <span>当前累计</span>
+        </div>
+        <svg width="26" height="14" viewBox="0 0 26 14" fill="none" aria-hidden="true">
+          <path d="M2 12 C 8 12, 14 2, 24 2" stroke="var(--bld-b)" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M19 2h5v5" stroke="var(--bld-b)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="g new">
+          <em>3.78</em>
+          <span>试算结果</span>
+          <i class="delta">+0.06</i>
+        </div>
+      </div>
+      <div class="track">
+        <b class="cur" style="width: 74%"></b>
+        <b class="new" style="left: 74%; width: 1.4%"></b>
+        <b class="ghost" style="left: 75.4%; width: 1.2%"></b>
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="row add">
+        <span class="chip-add">+ 添加课程</span>
+        <span class="chip-add ghost">+ 选择重修</span>
+      </div>
+      <div class="row">
+        <span class="name">数据结构 <i>重修</i></span>
+        <span class="score">95 · 4.0</span>
+        <span class="tag">拟</span>
+      </div>
+      <div class="row">
+        <span class="name">心理学导论 <i>新增</i></span>
+        <span class="score">90 · 4.0</span>
+        <span class="tag">拟</span>
+      </div>
+      <div class="goal">
+        <b>目标倒推</b>
+        <p>若希望累计绩点达到 <em>3.80</em>，还需两门 4 学分课程取得 4.0 绩点。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sim {
+    gap: 10px;
+  }
+
+  .result {
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  .gpa {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .g {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .g em {
+    font-style: normal;
+    font-size: 19px;
+    font-weight: 720;
+    letter-spacing: -0.01em;
+  }
+
+  .g.new em {
+    color: var(--bld-b);
+  }
+
+  .g span {
+    font-size: 9px;
+    color: #8a887f;
+  }
+
+  .delta {
+    font-style: normal;
+    align-self: flex-start;
+    font-size: 8.5px;
+    font-weight: 660;
+    color: var(--bld-b);
+    background: color-mix(in srgb, var(--bld-b) 13%, #fff);
+    border-radius: 5px;
+    padding: 0 6px;
+    margin-top: 2px;
+  }
+
+  .track {
+    position: relative;
+    margin-top: 12px;
+    height: 8px;
+    border-radius: 99px;
+    background: #eeede6;
+  }
+
+  .track b {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 99px;
+  }
+
+  .track .cur {
+    left: 0;
+    background: color-mix(in srgb, var(--app-copper) 62%, #f2ddcd);
+  }
+
+  .track .new {
+    background: var(--bld-b);
+  }
+
+  .track .ghost {
+    border-radius: 0 99px 99px 0;
+    border: 1.5px dashed color-mix(in srgb, var(--bld-b) 55%, #fff);
+    background: transparent;
+    top: -2px;
+    bottom: -2px;
+  }
+
+  .list {
+    flex: 1;
+    min-height: 0;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .row.add {
+    display: flex;
+    gap: 8px;
+  }
+
+  .chip-add {
+    font-size: 9.5px;
+    font-weight: 620;
+    color: var(--app-copper);
+    border: 1.2px dashed color-mix(in srgb, var(--app-copper) 45%, #fff);
+    border-radius: 8px;
+    padding: 4px 10px;
+  }
+
+  .chip-add.ghost {
+    color: #a3a198;
+    border-color: #d9d7cd;
+  }
+
+  .row:not(.add) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #faf9f3;
+    border: 1px solid #efede5;
+  }
+
+  .row .name {
+    font-size: 10.5px;
+    font-weight: 620;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .row .name i {
+    font-style: normal;
+    font-size: 8px;
+    color: #8a887f;
+    background: #efeee8;
+    border-radius: 4px;
+    padding: 0 5px;
+  }
+
+  .row .score {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 640;
+    color: #55534a;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .row .tag {
+    font-size: 8px;
+    font-weight: 660;
+    color: var(--bld-b);
+    background: color-mix(in srgb, var(--bld-b) 12%, #fff);
+    border-radius: 4px;
+    padding: 0 5px;
+  }
+
+  .goal {
+    margin-top: auto;
+    border-top: 1px dashed #e3e1d8;
+    padding-top: 9px;
+  }
+
+  .goal b {
+    font-size: 9.5px;
+    font-weight: 660;
+    color: #55534a;
+  }
+
+  .goal p {
+    margin-top: 2px;
+    font-size: 9.5px;
+    color: #8a887f;
+    line-height: 1.55;
+  }
+
+  .goal em {
+    font-style: normal;
+    font-weight: 680;
+    color: var(--app-copper);
+  }
+</style>

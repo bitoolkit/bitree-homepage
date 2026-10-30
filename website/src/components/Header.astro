@@ -1,0 +1,341 @@
+---
+import Icon from './Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { BASE, LINKS } from '../config';
+
+const path = Astro.url.pathname;
+
+const navItems = [
+  { href: `${BASE}features/`, label: '功能' },
+  { href: `${BASE}download/`, label: '下载' },
+  { href: `${BASE}help/`, label: '使用帮助' },
+];
+
+const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
+---
+
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a class="brand" href={BASE} aria-label="BITree 理枝 首页">
+      <img src={`${BASE}favicon.svg`} alt="" width="27" height="27" />
+      <span class="brand-name">BITree <em>理枝</em></span>
+    </a>
+
+    <nav class="site-nav" aria-label="主导航">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav-actions">
+      <a class="icon-link" href={LINKS.repo} target="_blank" rel="noopener" aria-label="GitHub 仓库">
+        <Icon name="github" size={19} />
+      </a>
+      <ThemeToggle />
+      <a class="btn btn--primary btn--nav" href={`${BASE}download/`}>
+        <Icon name="download" size={17} />
+        <span>下载</span>
+      </a>
+      <button
+        type="button"
+        class="icon-link menu-btn"
+        data-menu-button
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="打开菜单"
+      >
+        <span class="menu-open"><Icon name="menu" size={20} /></span>
+        <span class="menu-close"><Icon name="close" size={20} /></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav aria-label="移动端导航">
+      {
+        navItems.map((item) => (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+      <a href={LINKS.repo} target="_blank" rel="noopener">
+        GitHub <Icon name="external" size={15} />
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 60;
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    border-bottom: 1px solid transparent;
+    transition: height 0.25s var(--ease), background-color 0.25s var(--ease),
+      border-color 0.25s var(--ease), backdrop-filter 0.25s var(--ease);
+  }
+
+  .site-header.is-scrolled {
+    height: 58px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom-color: var(--line);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    margin-right: auto;
+  }
+
+  .brand img {
+    border-radius: 7px;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .brand:hover img {
+    transform: rotate(-6deg) scale(1.05);
+  }
+
+  .brand-name {
+    font-weight: 700;
+    font-size: 1.055rem;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .brand-name em {
+    font-style: normal;
+    font-weight: 550;
+    color: var(--text-2);
+    margin-left: 2px;
+  }
+
+  .site-nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .site-nav a {
+    position: relative;
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    font-weight: 550;
+    transition: color 0.18s var(--ease);
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 3px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: var(--brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.22s var(--ease);
+  }
+
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] {
+    color: var(--text);
+  }
+
+  .site-nav a:hover::after,
+  .site-nav a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    color: var(--text-2);
+    transition: color 0.18s var(--ease), background-color 0.18s var(--ease),
+      border-color 0.18s var(--ease);
+  }
+
+  .icon-link:hover {
+    color: var(--brand);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .btn--nav {
+    min-height: 38px;
+    padding: 7px 15px;
+    font-size: 0.875rem;
+    margin-left: 6px;
+    border-radius: 9px;
+  }
+
+  .menu-btn {
+    display: none;
+  }
+
+  .menu-btn[aria-expanded='true'] .menu-open {
+    display: none;
+  }
+
+  .menu-btn .menu-close {
+    display: none;
+  }
+
+  .menu-btn[aria-expanded='true'] .menu-close {
+    display: inline-flex;
+  }
+
+  /* 移动端菜单：覆盖在内容上方，不挤压页面布局 */
+  .mobile-menu {
+    position: fixed;
+    inset-inline: 12px;
+    top: calc(var(--header-h) + 6px);
+    z-index: 59;
+    padding: 10px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-m);
+  }
+
+  .mobile-menu nav {
+    display: grid;
+    gap: 2px;
+  }
+
+  .mobile-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    border-radius: var(--radius-s);
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 570;
+  }
+
+  .mobile-menu a:hover,
+  .mobile-menu a[aria-current='page'] {
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+
+  @media (max-width: 760px) {
+    .site-nav,
+    .nav-actions .icon-link[href^='https'] {
+      display: none;
+    }
+
+    .menu-btn {
+      display: inline-flex;
+    }
+
+    .btn--nav {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .btn--nav span {
+      display: none;
+    }
+
+    .btn--nav {
+      width: 38px;
+      padding: 7px 0;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+
+  const onScroll = () => {
+    header?.classList.toggle('is-scrolled', window.scrollY > 12);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  function setMenu(open: boolean) {
+    if (!menu || !menuBtn) return;
+    menu.hidden = !open;
+    menuBtn.ariaExpanded = String(open);
+    menuBtn.ariaLabel = open ? '关闭菜单' : '打开菜单';
+    if (open) {
+      menu.classList.add('is-open');
+      document.addEventListener('click', onOutside, { capture: true });
+      document.addEventListener('keydown', onEsc);
+    } else {
+      menu.classList.remove('is-open');
+      document.removeEventListener('click', onOutside, { capture: true });
+      document.removeEventListener('keydown', onEsc);
+    }
+  }
+
+  function onOutside(e: Event) {
+    if (!menu?.contains(e.target as Node) && !menuBtn?.contains(e.target as Node)) {
+      setMenu(false);
+    }
+  }
+
+  function onEsc(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      setMenu(false);
+      menuBtn?.focus();
+    }
+  }
+
+  menuBtn?.addEventListener('click', () => setMenu(menu?.hidden ?? false));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+</script>
+
+<style>
+  .mobile-menu {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.99);
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+
+  .mobile-menu.is-open {
+    opacity: 1;
+    transform: none;
+  }
+</style>

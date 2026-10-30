@@ -1,0 +1,141 @@
+---
+// 毕业学分进度示意界面：总进度 + 分类完成情况。
+const cats = [
+  { name: '公共基础课', got: 58, total: 68 },
+  { name: '专业课程', got: 22, total: 52 },
+  { name: '通识选修', got: 10, total: 12 },
+  { name: '实践环节', got: 6, total: 21 },
+  { name: '体育', got: 4, total: 4 },
+];
+const total = { got: 100, req: 167 };
+---
+
+<div class="app mock-credits">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">毕业学分进度</div>
+      <div class="app-sub">按学校培养方案同步</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip">2026 秋</span>
+  </div>
+
+  <div class="app-body credits">
+    <div class="total">
+      <div class="num">
+        <em>{total.got}</em>
+        <i>/ {total.req} 学分</i>
+      </div>
+      <div class="track">
+        <b style={`width: ${(total.got / total.req) * 100}%`}></b>
+      </div>
+      <span class="eta">已完成 {Math.round((total.got / total.req) * 100)}% · 分类目标可自行调整</span>
+    </div>
+
+    {
+      cats.map((c) => (
+        <div class="cat">
+          <span class="name">{c.name}</span>
+          <div class="track">
+            <b
+              class:list={{ full: c.got >= c.total }}
+              style={`width: ${Math.min(100, (c.got / c.total) * 100)}%`}
+            />
+          </div>
+          <span class="val">
+            {c.got}/{c.total}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .credits {
+    gap: 9px;
+  }
+
+  .total {
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .total .num {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .total em {
+    font-style: normal;
+    font-size: 22px;
+    font-weight: 730;
+    letter-spacing: -0.01em;
+    color: var(--app-copper);
+  }
+
+  .total i {
+    font-style: normal;
+    font-size: 10.5px;
+    color: #8a887f;
+  }
+
+  .track {
+    height: 8px;
+    border-radius: 99px;
+    background: #eeede6;
+    overflow: hidden;
+  }
+
+  .track b {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--app-copper) 70%, #f0d9c8);
+  }
+
+  .track b.full {
+    background: var(--bld-b);
+  }
+
+  .total .eta {
+    font-size: 9px;
+    color: #a3a198;
+  }
+
+  .cat {
+    display: grid;
+    grid-template-columns: 84px 1fr 46px;
+    gap: 10px;
+    align-items: center;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 8px 12px;
+  }
+
+  .cat .name {
+    font-size: 10px;
+    font-weight: 620;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cat .track {
+    height: 7px;
+  }
+
+  .cat .val {
+    font-size: 9.5px;
+    color: #8a887f;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

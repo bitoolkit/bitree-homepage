@@ -1,0 +1,406 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import DevicePreview from '../components/DevicePreview.astro';
+import MockTimetable from '../components/mocks/MockTimetable.astro';
+import MockAgenda from '../components/mocks/MockAgenda.astro';
+import MockClassroom from '../components/mocks/MockClassroom.astro';
+import MockExams from '../components/mocks/MockExams.astro';
+import MockGrades from '../components/mocks/MockGrades.astro';
+import MockSimulate from '../components/mocks/MockSimulate.astro';
+import MockCredits from '../components/mocks/MockCredits.astro';
+import MockWidget from '../components/mocks/MockWidget.astro';
+import { BASE, PLATFORMS, LINKS } from '../config';
+
+
+const groups = [
+  { id: 'schedule', kicker: '01', title: '课程与日程', desc: '每一天的安排，从上课到考试，都摊在同一张清晰的时间线上。' },
+  { id: 'academics', kicker: '02', title: '学业管理', desc: '成绩同步之后，绩点、学分与规划自动就位。' },
+  { id: 'experience', kicker: '03', title: '体验与辅助', desc: '跨平台一致的细节能力，按你的使用方式出现。' },
+];
+---
+
+<Base
+  title="功能"
+  description="BITree 理枝功能详解：课表、日程与 DDL、空教室、成绩绩点、成绩试算、毕业学分进度、考试冲突检查与 Android 小组件。"
+>
+  <div class="container">
+    <header class="page-head reveal">
+      <p class="kicker">功能</p>
+      <h1>理枝能帮你做什么</h1>
+      <p>
+        八个核心功能与一组贴心辅助，全部围绕北京理工大学的实际校园服务构建，
+        数据保存在本机。<a href={`${BASE}download/`}>立即下载</a> 或返回
+        <a href={LINKS.repo} target="_blank" rel="noopener">GitHub 仓库</a>。
+      </p>
+    </header>
+
+    <!-- 01 课程与日程 -->
+    <section class="group" aria-labelledby="g-schedule">
+      <div class="group-head reveal">
+        <span class="group-no">{groups[0].kicker}</span>
+        <div>
+          <h2 id="g-schedule">{groups[0].title}</h2>
+          <p>{groups[0].desc}</p>
+        </div>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-text">
+          <h3>课程表</h3>
+          <p>同步学校课表，也支持手动添加课程。按周查看，始终显示当前时间进度。</p>
+          <ul>
+            <li>课程块按楼栋片区配色，位置关系一眼可辨</li>
+            <li>点击课程查看详情，以及与下一门课的换楼关系</li>
+            <li>浏览其他周次时，「回到本周」随时可返回</li>
+            <li>支持导出 ICS，导入系统日历</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="window"><MockTimetable /></DevicePreview>
+        </div>
+      </div>
+
+      <div class="feat feat--reverse reveal">
+        <div class="feat-text">
+          <h3>日程与 DDL</h3>
+          <p>统一管理考试、活动与截止日期，同步考试安排以及乐学、新延河课堂的 DDL 与完成状态。</p>
+          <ul>
+            <li>列表与瀑布时间轴两种视图，可缩放浏览</li>
+            <li>DDL 按来源着色，右端对齐截止时间，逾期状态醒目</li>
+            <li>保留本地编辑与完成状态，同步不会覆盖你的标记</li>
+            <li>可一键生成大物实验的预习与实验报告 DDL</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="phone" ratio="9/16.2"><MockAgenda /></DevicePreview>
+        </div>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-text">
+          <h3>空教室查询</h3>
+          <p>按校区、教学楼和日期查看空闲时段，自习教室提前找好。</p>
+          <ul>
+            <li>逐节次展示每间教室的占用情况</li>
+            <li>可筛选指定时段内全程空闲的教室</li>
+            <li>同账号的目录与占用结果短时缓存，反复筛选不重复请求</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="window"><MockClassroom /></DevicePreview>
+        </div>
+      </div>
+
+      <div class="feat feat--reverse reveal">
+        <div class="feat-text">
+          <h3>考试安排与冲突检查</h3>
+          <p>考试复用日程中的条目，自动检查考试之间以及考试与已保存课表的时间冲突。</p>
+          <ul>
+            <li>考试安排一键同步，无需手动录入</li>
+            <li>时间冲突在列表中直接标出</li>
+            <li>与课表对照，避免考前才发现撞车</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="phone" ratio="9/15.8"><MockExams /></DevicePreview>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 学业管理 -->
+    <section class="group" aria-labelledby="g-academics">
+      <div class="group-head reveal">
+        <span class="group-no">{groups[1].kicker}</span>
+        <div>
+          <h2 id="g-academics">{groups[1].title}</h2>
+          <p>{groups[1].desc}</p>
+        </div>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-text">
+          <h3>成绩与绩点</h3>
+          <p>同步全部学期成绩，查看加权平均分、绩点和学期表现。</p>
+          <ul>
+            <li>绩点采用学校公布的<a href={LINKS.gpaRule} target="_blank" rel="noopener">本科生计算规则</a></li>
+            <li>同一课程取最高成绩计入</li>
+            <li>按学期查看趋势，学期表现一目了然</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="window"><MockGrades /></DevicePreview>
+        </div>
+      </div>
+
+      <div class="feat feat--reverse reveal">
+        <div class="feat-text">
+          <h3>成绩试算</h3>
+          <p>手动添加课程或选择重修课程，试算累计绩点变化，也可以倒推达到目标所需的成绩。试算不会修改原成绩。</p>
+          <ul>
+            <li>拟修课程即时生效，绩点变化实时呈现</li>
+            <li>目标绩点倒推，选课决策有依据</li>
+            <li>与真实成绩完全隔离，随时清空</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="window"><MockSimulate /></DevicePreview>
+        </div>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-text">
+          <h3>毕业学分进度</h3>
+          <p>同步学校记录的总要求与已修学分，设置分类目标，随时掌握毕业距离。</p>
+          <ul>
+            <li>总学分与分类学分进度同屏展示</li>
+            <li>分类目标可按自己的培养方案调整</li>
+            <li>可在课程详情中核对、调整学分分类</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="window"><MockCredits /></DevicePreview>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 体验与辅助 -->
+    <section class="group" aria-labelledby="g-experience">
+      <div class="group-head reveal">
+        <span class="group-no">{groups[2].kicker}</span>
+        <div>
+          <h2 id="g-experience">{groups[2].title}</h2>
+          <p>{groups[2].desc}</p>
+        </div>
+      </div>
+
+      <div class="feat feat--reverse reveal">
+        <div class="feat-text">
+          <h3>Android 小组件</h3>
+          <p>在桌面直接查看课程和日程，提供单列、双列两种布局，不必打开应用。</p>
+          <ul>
+            <li>课表与日程数据保存后自动刷新</li>
+            <li>浅色深色主题与系统保持一致</li>
+          </ul>
+        </div>
+        <div class="feat-visual">
+          <DevicePreview variant="phone" ratio="9/16.2"><MockWidget /></DevicePreview>
+        </div>
+      </div>
+
+      <div class="mini-grid">
+        <div class="mini reveal">
+          <span class="mini-icon"><Icon name="laptop" size={20} /></span>
+          <h3>五端一致</h3>
+          <p>Android、Windows、macOS、Linux 与 iOS 使用同一套界面与交互，换设备不重新学习。</p>
+        </div>
+        <div class="mini reveal" style="--reveal-delay: 80ms">
+          <span class="mini-icon"><Icon name="offline" size={20} /></span>
+          <h3>离线查看</h3>
+          <p>已保存的课表和日程随时离线翻看，同步才需要联网。</p>
+        </div>
+        <div class="mini reveal" style="--reveal-delay: 160ms">
+          <span class="mini-icon"><Icon name="theme" size={20} /></span>
+          <h3>深浅色主题</h3>
+          <p>浅色、深色与跟随系统三种外观，深色课表按楼宇配色专门调校。</p>
+        </div>
+        <div class="mini reveal" style="--reveal-delay: 240ms">
+          <span class="mini-icon"><Icon name="sync" size={20} /></span>
+          <h3>校园网络自适应</h3>
+          <p>教学中心同时探测校内直连与 WebVPN，自动选择先连通的线路；乐学和新延河课堂直接访问。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(40px, 6vw, 72px) clamp(20px, 3vw, 36px);
+    max-width: 680px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+  }
+
+  .page-head p {
+    margin-top: 16px;
+    color: var(--text-2);
+    font-size: 1.03rem;
+  }
+
+  .page-head a {
+    font-weight: 570;
+  }
+
+  .group {
+    padding-block: clamp(36px, 5vw, 64px);
+  }
+
+  .group-head {
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    padding-bottom: clamp(22px, 3vw, 34px);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+
+  .group-no {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 640;
+    color: var(--brand);
+    border: 1px solid var(--brand-line);
+    background: var(--brand-soft);
+    border-radius: 8px;
+    padding: 3px 9px;
+  }
+
+  .group-head h2 {
+    font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+  }
+
+  .group-head p {
+    margin-top: 8px;
+    color: var(--text-2);
+  }
+
+  .feat {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+    padding-block: clamp(28px, 4vw, 52px);
+  }
+
+  .feat + .feat {
+    border-top: 1px solid var(--line);
+  }
+
+  .feat--reverse .feat-text {
+    order: 2;
+  }
+
+  .feat--reverse .feat-visual {
+    order: 1;
+  }
+
+  .feat-text h3 {
+    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  }
+
+  .feat-text > p {
+    margin-top: 12px;
+    color: var(--text-2);
+    font-size: 0.98rem;
+  }
+
+  .feat-text ul {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .feat-text li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 0.9rem;
+    color: var(--text-2);
+  }
+
+  .feat-text li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.52em;
+    width: 14px;
+    height: 9px;
+    border-left: 1.8px solid var(--brand);
+    border-bottom: 1.8px solid var(--brand);
+    border-bottom-left-radius: 2px;
+    transform: rotate(-48deg) translateY(-2px);
+  }
+
+  .feat-visual :global(.device--phone) {
+    max-width: 320px;
+    margin-inline: auto;
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-block: clamp(20px, 3vw, 36px);
+  }
+
+  .mini {
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-s);
+    transition: transform 0.22s var(--ease), border-color 0.22s var(--ease);
+  }
+
+  .mini:hover {
+    transform: translateY(-2px);
+    border-color: var(--brand-line);
+  }
+
+  .mini-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    margin-bottom: 14px;
+  }
+
+  .mini h3 {
+    font-size: 1rem;
+  }
+
+  .mini p {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 920px) {
+    .feat {
+      grid-template-columns: 1fr;
+    }
+
+    .feat--reverse .feat-text {
+      order: 1;
+    }
+
+    .feat--reverse .feat-visual {
+      order: 2;
+    }
+
+    .mini-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mini-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .group-head {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+</style>

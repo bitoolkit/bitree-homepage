@@ -1,0 +1,122 @@
+---
+// 空教室查询示意界面：校区 / 教学楼 / 日期 / 时段筛选 + 空闲时段结果。
+// 每个教室一行，浅绿块为空闲节次，灰块为占用。
+const rooms = [
+  { room: '文萃楼 F-201', free: [1, 2, 0, 0, 1, 1, 1, 1, 0, 1] },
+  { room: '文萃楼 F-203', free: [1, 1, 1, 0, 0, 1, 1, 0, 1, 1] },
+  { room: '文萃楼 F-305', free: [0, 0, 1, 1, 1, 0, 0, 1, 1, 1] },
+  { room: '文萃楼 F-402', free: [1, 1, 1, 1, 1, 0, 1, 0, 0, 1] },
+  { room: '文萃楼 F-508', free: [1, 0, 0, 1, 1, 1, 1, 1, 1, 0] },
+];
+const periodLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+---
+
+<div class="app mock-classroom">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">空教室</div>
+      <div class="app-sub">良乡校区 · 今天</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip">文萃楼</span>
+    <span class="app-chip">第 3–6 节全程空闲</span>
+  </div>
+
+  <div class="app-body rooms">
+    <div class="axis" aria-hidden="true">
+      <span>节次</span>
+      <div class="ticks">{periodLabels.map((p) => <i>{p}</i>)}</div>
+    </div>
+    {
+      rooms.map((r) => (
+        <div class="room">
+          <span class="name">{r.room}</span>
+          <span class="slots">
+            {r.free.map((f, i) => (
+              <i class:list={f ? 'free' : 'busy'} data-hint={f ? '空闲' : '占用'} />
+            ))}
+          </span>
+        </div>
+      ))
+    }
+    <p class="hint">共 5 间 · 第 3–6 节全程空闲 2 间</p>
+  </div>
+</div>
+
+<style>
+  .rooms {
+    gap: 7px;
+  }
+
+  .axis {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .axis span {
+    font-size: 8.5px;
+    color: #a3a198;
+  }
+
+  .ticks {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 3px;
+  }
+
+  .ticks i {
+    font-style: normal;
+    font-size: 8px;
+    color: #a3a198;
+    text-align: center;
+  }
+
+  .room {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 8px;
+    align-items: center;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 8px;
+    padding: 7px 10px;
+  }
+
+  .room .name {
+    font-size: 10px;
+    font-weight: 620;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .slots {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 3px;
+  }
+
+  .slots i {
+    height: 14px;
+    border-radius: 4px;
+  }
+
+  .slots i.free {
+    background: color-mix(in srgb, var(--bld-b) 26%, #fff);
+    border: 1px solid color-mix(in srgb, var(--bld-b) 42%, #fff);
+  }
+
+  .slots i.busy {
+    background: #eeede6;
+    border: 1px solid #e4e2da;
+  }
+
+  .hint {
+    font-size: 9px;
+    color: #a3a198;
+    margin-top: auto;
+    padding-left: 2px;
+  }
+</style>

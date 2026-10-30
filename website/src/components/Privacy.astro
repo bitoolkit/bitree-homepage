@@ -1,0 +1,248 @@
+---
+import Icon from './Icon.astro';
+
+// 与 README「数据与日志」一节的表述保持一致，不做超出事实的安全宣传。
+const points = [
+  {
+    icon: 'offline',
+    title: '已保存数据可离线查看',
+    desc: '课表和日程保存在本机，没网也能随时翻看。',
+  },
+  {
+    icon: 'lock',
+    title: '凭据使用系统安全存储',
+    desc: '账号密码和登录会话交给操作系统级别的安全存储保管。',
+  },
+  {
+    icon: 'branch',
+    title: '校园请求由本地直接发起',
+    desc: '访问教学中心、乐学和新延河课堂的请求从你的设备直接发出。',
+  },
+  {
+    icon: 'alert',
+    title: '不经第三方中转服务器',
+    desc: '不存在处理校园账号请求的中间服务器，同步不需要把凭据交给任何人。',
+  },
+];
+---
+
+<section class="section section--alt" id="privacy">
+  <div class="container privacy-grid">
+    <div class="privacy-copy">
+      <header class="section-head reveal" style="margin-bottom: 34px">
+        <p class="kicker">隐私与本地优先</p>
+        <h2>你的校园数据，<br />留在你的设备。</h2>
+        <p>理枝以本地优先的方式工作：数据在本机存储，请求从本机直达校园服务。</p>
+      </header>
+
+      <ul class="privacy-points" role="list">
+        {
+          points.map((p, i) => (
+            <li class="reveal" style={`--reveal-delay: ${i * 80}ms`}>
+              <span class="p-icon">
+                <Icon name={p.icon} size={19} />
+              </span>
+              <div>
+                <b>{p.title}</b>
+                <p>{p.desc}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="privacy-art reveal" style="--reveal-delay: 120ms" aria-hidden="true">
+      <svg viewBox="0 0 520 420" fill="none">
+        <!-- 你的设备 -->
+        <g class="device-node">
+          <rect x="46" y="170" width="118" height="80" rx="14" class="dev-body" />
+          <rect x="62" y="186" width="60" height="7" rx="3.5" class="dev-line" />
+          <rect x="62" y="200" width="86" height="7" rx="3.5" class="dev-line dim" />
+          <rect x="62" y="214" width="42" height="7" rx="3.5" class="dev-line dim" />
+          <g class="lock" transform="translate(132 224) scale(0.62)">
+            <rect x="5" y="10.5" width="14" height="9.5" rx="2.5" />
+            <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+          </g>
+          <text x="105" y="278" class="svg-label">你的设备</text>
+        </g>
+
+        <!-- 校园服务节点 -->
+        <g class="svc" transform="translate(352 60)">
+          <circle cx="52" cy="20" r="6" class="node" />
+          <text x="52" y="48" class="svg-label">教学中心</text>
+        </g>
+        <g class="svc" transform="translate(352 168)">
+          <circle cx="52" cy="20" r="6" class="node" />
+          <text x="52" y="48" class="svg-label">乐学</text>
+        </g>
+        <g class="svc" transform="translate(352 288)">
+          <circle cx="52" cy="20" r="6" class="node" />
+          <text x="52" y="48" class="svg-label">新延河课堂</text>
+        </g>
+
+        <!-- 直连曲线 -->
+        <g class="links">
+          <path class="link" d="M164 190 C 250 150, 260 92, 346 80" />
+          <path class="link" d="M164 206 C 250 200, 260 190, 346 188" />
+          <path class="link" d="M164 228 C 250 268, 260 300, 346 308" />
+        </g>
+
+        <!-- 被划掉的中间服务器 -->
+        <g class="mid" transform="translate(214 366)">
+          <rect x="-46" y="-14" width="118" height="30" rx="9" />
+          <text x="13" y="6">中转服务器</text>
+          <path class="cross" d="M-54 -20 L72 22" />
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section--alt {
+    background: var(--bg-2);
+    border-block: 1px solid var(--line);
+  }
+
+  .privacy-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .privacy-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .privacy-points li {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .privacy-points li:last-child {
+    border-bottom: none;
+  }
+
+  .p-icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--brand);
+  }
+
+  .privacy-points b {
+    font-size: 0.95rem;
+    font-weight: 640;
+  }
+
+  .privacy-points p {
+    margin-top: 3px;
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+
+  /* 示意图 */
+  .privacy-art svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .dev-body {
+    fill: var(--surface);
+    stroke: var(--brand);
+    stroke-width: 1.6;
+  }
+
+  .dev-line {
+    fill: var(--brand);
+    opacity: 0.55;
+  }
+
+  .dev-line.dim {
+    opacity: 0.25;
+  }
+
+  .lock {
+    stroke: var(--brand);
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .node {
+    fill: var(--brand);
+  }
+
+  .svg-label {
+    fill: var(--text-2);
+    font-size: 12px;
+    font-family: var(--font-sans);
+    text-anchor: middle;
+  }
+
+  .link {
+    stroke: var(--brand);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 2 7;
+    opacity: 0.55;
+    animation: dash-flow 14s linear infinite;
+  }
+
+  @keyframes dash-flow {
+    to {
+      stroke-dashoffset: -180;
+    }
+  }
+
+  .svc .svg-label {
+    font-weight: 570;
+  }
+
+  .mid rect {
+    fill: var(--surface-2);
+    stroke: var(--line-2);
+    stroke-width: 1.2;
+  }
+
+  .mid text {
+    fill: var(--text-3);
+    font-size: 12px;
+    font-family: var(--font-sans);
+    text-anchor: middle;
+  }
+
+  .cross {
+    stroke: #c0563f;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 960px) {
+    .privacy-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .privacy-art {
+      max-width: 460px;
+      margin-inline: auto;
+    }
+  }
+</style>

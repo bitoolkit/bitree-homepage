@@ -1,0 +1,139 @@
+---
+import Icon from './Icon.astro';
+import { BASE, SITE, LINKS } from '../config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href={BASE}>
+          <img src={`${BASE}favicon.svg`} alt="" width="26" height="26" />
+          <span>BITree <em>理枝</em></span>
+        </a>
+        <p>{SITE.tagline}。</p>
+        <p class="made">
+          Made by <a href={LINKS.org} target="_blank" rel="noopener">{SITE.org}</a> with ♥
+        </p>
+      </div>
+
+      <nav aria-label="页脚">
+        <h3>产品</h3>
+        <a href={`${BASE}features/`}>功能</a>
+        <a href={`${BASE}download/`}>下载</a>
+        <a href={`${BASE}help/`}>使用帮助</a>
+        <a href={LINKS.releases} target="_blank" rel="noopener">更新日志</a>
+      </nav>
+
+      <nav aria-label="资源">
+        <h3>资源</h3>
+        <a href={LINKS.repo} target="_blank" rel="noopener">GitHub 仓库</a>
+        <a href={LINKS.issues} target="_blank" rel="noopener">问题反馈</a>
+        <a href={LINKS.license} target="_blank" rel="noopener">许可证（Unlicense）</a>
+      </nav>
+
+      <nav aria-label="下载">
+        <h3>下载</h3>
+        <a href={`${BASE}download/`}>Android · Windows</a>
+        <a href={`${BASE}download/`}>macOS · Linux · iOS</a>
+        <a href={LINKS.releasesPrerelease} target="_blank" rel="noopener">测试版</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} {SITE.org} · 以 <a href={LINKS.license} target="_blank" rel="noopener">Unlicense</a> 发布</p>
+      <p class="disclaimer">社区开发的开源软件，与北京理工大学官方无关。</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--bg-2);
+    padding-block: clamp(48px, 6vw, 72px) 28px;
+    margin-top: clamp(40px, 6vw, 72px);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.4fr) repeat(3, minmax(96px, 1fr));
+    gap: 40px 28px;
+  }
+
+  .footer-brand .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .footer-brand .brand em {
+    font-style: normal;
+    font-weight: 550;
+    color: var(--text-2);
+  }
+
+  .footer-brand p {
+    margin-top: 13px;
+    color: var(--text-2);
+    font-size: 0.9rem;
+    max-width: 30ch;
+  }
+
+  .made a {
+    font-weight: 600;
+  }
+
+  nav h3 {
+    font-size: 0.8rem;
+    font-weight: 640;
+    letter-spacing: 0.1em;
+    color: var(--text-3);
+    margin-bottom: 14px;
+  }
+
+  nav a {
+    display: block;
+    padding: 4.5px 0;
+    color: var(--text-2);
+    font-size: 0.9rem;
+  }
+
+  nav a:hover {
+    color: var(--brand);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: clamp(40px, 5vw, 56px);
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    color: var(--text-3);
+    font-size: 0.8125rem;
+  }
+
+  .footer-bottom a {
+    color: var(--text-3);
+  }
+
+  .footer-bottom a:hover {
+    color: var(--brand);
+  }
+
+  @media (max-width: 760px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

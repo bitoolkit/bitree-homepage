@@ -1,0 +1,172 @@
+---
+import Icon from './Icon.astro';
+import BranchArt from './BranchArt.astro';
+import DevicePreview from './DevicePreview.astro';
+import MockTimetable from './mocks/MockTimetable.astro';
+import MockAgenda from './mocks/MockAgenda.astro';
+import { BASE, LINKS } from '../config';
+
+---
+
+<section class="hero">
+  <BranchArt class="hero-branch" />
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="hero-tags fade-up">
+        <span class="pill"><Icon name="laptop" size={14} />跨平台</span>
+        <span class="pill"><Icon name="github" size={14} />开源</span>
+        <span class="pill"><Icon name="lock" size={14} />本地优先</span>
+      </p>
+
+      <h1 class="fade-up" style="--reveal-delay: 90ms">
+        让校园生活，<br />井井有条。
+      </h1>
+
+      <p class="hero-sub fade-up" style="--reveal-delay: 180ms">
+        BITree 理枝，为北京理工大学同学打造的跨平台校园工具。<br class="hero-br" />
+        课表、DDL、成绩与日程，一处管理。
+      </p>
+
+      <div class="hero-actions fade-up" style="--reveal-delay: 270ms">
+        <a class="btn btn--primary" href={`${BASE}download/`}>
+          <Icon name="download" size={17} />
+          立即下载
+        </a>
+        <a class="btn btn--ghost" href={`${BASE}features/`}>
+          了解功能
+          <Icon name="arrow-right" size={16} />
+        </a>
+        <a class="link-quiet hero-repo" href={LINKS.repo} target="_blank" rel="noopener">
+          <Icon name="github" size={16} />
+          GitHub 仓库
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-devices fade-up" style="--reveal-delay: 200ms">
+      <DevicePreview variant="window" class="hero-window">
+        <MockTimetable />
+      </DevicePreview>
+      <DevicePreview variant="phone" class="hero-phone">
+        <MockAgenda />
+      </DevicePreview>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: clip;
+    padding-block: clamp(48px, 7vw, 96px) clamp(56px, 8vw, 110px);
+    background:
+      radial-gradient(52% 42% at 78% 12%, var(--brand-soft), transparent 70%),
+      var(--bg);
+  }
+
+  .hero-branch {
+    position: absolute;
+    right: -60px;
+    top: -40px;
+    width: clamp(420px, 46vw, 660px);
+    height: auto;
+    opacity: 0.85;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 26px;
+  }
+
+  h1 {
+    font-size: clamp(2.35rem, 5.6vw, 3.6rem);
+    font-weight: 730;
+    letter-spacing: -0.02em;
+    line-height: 1.18;
+  }
+
+  .hero-sub {
+    margin-top: 22px;
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    color: var(--text-2);
+    max-width: 34em;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 34px;
+  }
+
+  .hero-repo {
+    padding: 8px 4px;
+    font-weight: 550;
+  }
+
+  /* 设备组合：桌面窗口 + 手机错落叠放 */
+  .hero-devices {
+    position: relative;
+    padding-bottom: clamp(36px, 5vw, 64px);
+  }
+
+  .hero-window {
+    width: 100%;
+  }
+
+  .hero-phone {
+    position: absolute;
+    right: -4%;
+    bottom: 0;
+    width: clamp(120px, 26%, 190px);
+    animation: float 7s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-devices {
+      max-width: 560px;
+      margin-inline: auto;
+      width: 100%;
+    }
+
+    .hero-branch {
+      right: -140px;
+      opacity: 0.5;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-br {
+      display: none;
+    }
+
+    .hero-phone {
+      right: -2%;
+    }
+  }
+</style>

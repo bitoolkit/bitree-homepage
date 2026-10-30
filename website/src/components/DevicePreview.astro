@@ -1,0 +1,198 @@
+---
+// 设备预览框架：桌面窗口（浏览器）或手机两种形态。
+// screenshot 属性传入真实截图路径后自动替换示意界面并隐藏「示意」标记——
+// 这是接入真实截图的唯一入口，详见 website/README.md。
+import '../styles/mock.css';
+
+interface Props {
+  variant?: 'window' | 'phone';
+  /** 覆盖默认宽高比（如 9/16.4），用于裁剪过高的内容 */
+  ratio?: string;
+  screenshot?: string;
+  alt?: string;
+  class?: string;
+}
+
+const { variant = 'window', ratio, screenshot, alt, class: cls } = Astro.props;
+---
+
+<div class:list={['device', `device--${variant}`, cls]} style={ratio && `aspect-ratio: ${ratio};`}>
+  {
+    variant === 'window' ? (
+      <div class="device-chrome" aria-hidden="true">
+        <span class="dots">
+          <i /> <i /> <i />
+        </span>
+        <span class="address">BITree 理枝</span>
+      </div>
+    ) : (
+      <div class="device-status" aria-hidden="true">
+        <span>09:41</span>
+        <span class="status-right">
+          <i class="sig" /> <i class="batt" />
+        </span>
+      </div>
+    )
+  }
+  <div class="device-screen">
+    {
+      screenshot ? (
+        <img src={screenshot} alt={alt ?? 'BITree 应用截图'} loading="lazy" decoding="async" />
+      ) : (
+        <slot />
+      )
+    }
+    {!screenshot && <span class="mock-tag">界面示意</span>}
+  </div>
+  {variant === 'phone' && <span class="device-notch" aria-hidden="true" />}
+</div>
+
+<style>
+  .device {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    box-shadow: var(--shadow-m);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+
+  .device:hover {
+    transform: translateY(-3px);
+  }
+
+  /* 桌面窗口 */
+  .device--window {
+    aspect-ratio: 16 / 10.6;
+  }
+
+  .device-chrome {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 32px;
+    padding-inline: 13px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+
+  .dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line-2);
+  }
+
+  .address {
+    margin-inline: auto;
+    font-size: 10.5px;
+    color: var(--text-3);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.5px 16px;
+  }
+
+  /* 手机 */
+  .device--phone {
+    aspect-ratio: 9 / 19;
+    border-radius: 26px;
+    border-width: 5px;
+    border-color: color-mix(in srgb, var(--text) 14%, var(--surface));
+    box-shadow: 0 18px 44px rgb(20 30 24 / 0.16);
+  }
+
+  .device-status {
+    flex: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 18px 4px;
+    font-size: 10px;
+    font-weight: 620;
+    color: var(--app-text, #26251f);
+    background: var(--app-bg, #f6f7f3);
+  }
+
+  .status-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sig {
+    width: 11px;
+    height: 7px;
+    background: linear-gradient(135deg, currentColor 55%, transparent 55.5%);
+    clip-path: polygon(0 45%, 100% 45%, 100% 100%, 0 100%);
+    transform: skewX(-18deg);
+  }
+
+  .batt {
+    width: 16px;
+    height: 8px;
+    border: 1px solid currentColor;
+    border-radius: 2.5px;
+    position: relative;
+    opacity: 0.85;
+  }
+
+  .batt::before {
+    content: '';
+    position: absolute;
+    inset: 1.5px 5.5px 1.5px 1.5px;
+    background: currentColor;
+    border-radius: 1px;
+  }
+
+  .batt::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 2px;
+    bottom: 2px;
+    width: 1.5px;
+    background: currentColor;
+    border-radius: 1px;
+  }
+
+  .device-notch {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 74px;
+    height: 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text) 16%, var(--surface));
+    pointer-events: none;
+  }
+
+  .device-screen {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+    background: var(--app-bg, #f6f7f3);
+  }
+
+  .device-screen > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  :global(.device--window) .device-screen {
+    border-radius: 0;
+  }
+</style>

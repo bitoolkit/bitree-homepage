@@ -1,0 +1,183 @@
+---
+// 日程示意界面：横向多泳道时间轴（瀑布图）。
+// DDL 按来源配色：手动·文萃绿 / 考试·橙 / 乐学·黄绿 / 新延河·青绿 / 大物实验·紫，
+// DDL 条向左渐隐、右端对齐截止时间——规则来自 docs/architecture.md。
+const lanes = [
+  {
+    items: [
+      { kind: 'exam', title: '大学物理 期中考试', time: '周日 14:00–16:00', room: '综教 A-305', top: '12%', w: '34%' },
+    ],
+  },
+  {
+    items: [
+      { kind: 'manual', title: '社团招新策划', time: '周六 全天', room: '', top: '30%', w: '22%' },
+    ],
+  },
+  {
+    items: [
+      { kind: 'leyou', title: '数据结构 实验报告', time: '截止 周五 23:59', room: '乐学', top: '48%', w: '58%' },
+    ],
+  },
+  {
+    items: [
+      { kind: 'yanhe', title: '大学英语 展示准备', time: '截止 周四 22:00', room: '新延河课堂', top: '66%', w: '41%' },
+    ],
+  },
+  {
+    items: [
+      { kind: 'physics', title: '大物实验 预习报告', time: '截止 周三 08:00', room: '', top: '84%', w: '26%', done: true },
+    ],
+  },
+];
+const kindColor: Record<string, string> = {
+  manual: 'var(--bld-b)',
+  exam: 'var(--src-exam)',
+  leyou: 'var(--src-leyou)',
+  yanhe: 'var(--src-yanhe)',
+  physics: 'var(--src-physics)',
+};
+---
+
+<div class="app mock-agenda">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">日程</div>
+      <div class="app-sub">10 月 26 日 – 11 月 1 日</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip">全部</span>
+    <span class="app-chip is-active">考试</span>
+    <span class="app-chip">DDL</span>
+  </div>
+
+  <div class="app-body timeline">
+    <div class="dates" aria-hidden="true">
+      <span>周一 26</span><span>周二 27</span><span>周三 28</span><span>周四 29</span><span>周五 30</span><span>周六 31</span><span>周日 1</span>
+    </div>
+    <div class="canvas">
+      <div class="gridlines" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="nowline" style="left: 55%" aria-hidden="true"></div>
+      {
+        lanes.map((lane) =>
+          lane.items.map((it) => (
+            <div
+              class:list={['entry', { done: it.done }]}
+              style={`top: ${it.top}; left: calc(100% - ${it.w} - 4px); width: ${it.w}; --src: ${kindColor[it.kind]};`}
+            >
+              <b>{it.title}</b>
+              <span>{it.time}{it.room ? ` · ${it.room}` : ''}</span>
+            </div>
+          ))
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .timeline {
+    padding: 10px 8px;
+    gap: 4px;
+  }
+
+  .dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 8.5px;
+    color: #a3a198;
+    text-align: center;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #e8e6df;
+  }
+
+  .canvas {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    border-radius: 8px;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    overflow: hidden;
+  }
+
+  .gridlines {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .gridlines i {
+    border-right: 1px dashed #eceae3;
+  }
+
+  .gridlines i:last-child {
+    border-right: none;
+  }
+
+  .nowline {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1.5px;
+    background: #c65a3a;
+  }
+
+  .nowline::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -2.5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c65a3a;
+  }
+
+  /* 泳道条目：右端对齐截止时间，向左渐隐 */
+  .entry {
+    position: absolute;
+    height: 34px;
+    border-radius: 7px;
+    padding: 5px 8px 5px 26px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    color: var(--src);
+    background: linear-gradient(90deg, transparent 4%, color-mix(in srgb, var(--src) 15%, #fff) 42%, color-mix(in srgb, var(--src) 24%, #fff));
+    border: 1px solid color-mix(in srgb, var(--src) 30%, #fff);
+    border-right: 2.5px solid var(--src);
+  }
+
+  .entry b {
+    font-size: 9.5px;
+    font-weight: 660;
+    line-height: 1.3;
+    color: color-mix(in srgb, var(--src) 62%, #2c2b25);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .entry span {
+    font-size: 8px;
+    line-height: 1.35;
+    opacity: 0.78;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .entry.done {
+    opacity: 0.5;
+  }
+
+  .entry.done b {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+</style>

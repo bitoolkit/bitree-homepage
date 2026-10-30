@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import FeatureBento from '../components/FeatureBento.astro';
+import Showcase from '../components/Showcase.astro';
+import Platforms from '../components/Platforms.astro';
+import Privacy from '../components/Privacy.astro';
+import CTA from '../components/CTA.astro';
+import { SITE, LINKS, PLATFORMS } from '../config';
+---
+
+<Base title="首页" description={SITE.description}>
+  <Hero />
+  <FeatureBento />
+  <Showcase />
+  <Platforms />
+  <Privacy />
+  <CTA />
+</Base>
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'BITree 理枝',
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: PLATFORMS.map((p) => p.name).join(', '),
+  description: SITE.description,
+  url: LINKS.repo,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
+  author: { '@type': 'Organization', name: 'BIToolkit', url: LINKS.org },
+  license: 'https://unlicense.org',
+})} />

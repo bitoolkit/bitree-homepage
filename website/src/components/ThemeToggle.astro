@@ -1,0 +1,109 @@
+---
+// 主题切换：三态循环 自动（跟随系统）→ 浅色 → 深色。
+// 首次点击前跟随系统；选择后持久化到 localStorage。
+import Icon from './Icon.astro';
+---
+
+<button
+  type="button"
+  class="theme-toggle icon-link"
+  data-theme-toggle
+  aria-label="切换主题（当前：跟随系统）"
+  title="主题：跟随系统"
+>
+  <span class="theme-toggle-icons" aria-hidden="true">
+    <Icon name="auto" size={19} class="ic ic-auto" />
+    <Icon name="sun" size={19} class="ic ic-light" />
+    <Icon name="moon" size={19} class="ic ic-dark" />
+  </span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: color 0.18s var(--ease), background-color 0.18s var(--ease),
+      border-color 0.18s var(--ease);
+  }
+
+  .theme-toggle:hover {
+    color: var(--brand);
+    background: var(--surface);
+    border-color: var(--line);
+  }
+
+  .theme-toggle-icons {
+    position: relative;
+    width: 19px;
+    height: 19px;
+  }
+
+  /* 图标位于 Icon 子组件内部，scoped 选择器无法命中，需用 :global */
+  .theme-toggle-icons :global(svg) {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(0.7) rotate(-30deg);
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+
+  :global(html[data-theme='auto']) .theme-toggle-icons :global(.ic-auto),
+  :global(html[data-theme='light']) .theme-toggle-icons :global(.ic-light),
+  :global(html[data-theme='dark']) .theme-toggle-icons :global(.ic-dark) {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+
+<script>
+  const KEY = 'bitree-theme';
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+
+  function currentTheme(): 'auto' | 'light' | 'dark' {
+    const v = document.documentElement.dataset.theme;
+    return v === 'light' || v === 'dark' ? v : 'auto';
+  }
+
+  function apply(theme: 'auto' | 'light' | 'dark') {
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    const dark = theme === 'dark' || (theme === 'auto' && mq.matches);
+    root.classList.toggle('dark', dark);
+    const label = { auto: '跟随系统', light: '浅色', dark: '深色' }[theme];
+    buttons.forEach((b) => {
+      b.ariaLabel = `切换主题（当前：${label}）`;
+      b.title = `主题：${label}`;
+    });
+  }
+
+  function next(): 'auto' | 'light' | 'dark' {
+    const order: ('auto' | 'light' | 'dark')[] = ['auto', 'light', 'dark'];
+    return order[(order.indexOf(currentTheme()) + 1) % order.length];
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const t = next();
+      try {
+        localStorage.setItem(KEY, t);
+      } catch {
+        /* 隐私模式下忽略 */
+      }
+      apply(t);
+    })
+  );
+
+  mq.addEventListener('change', () => {
+    if (currentTheme() === 'auto') apply('auto');
+  });
+</script>

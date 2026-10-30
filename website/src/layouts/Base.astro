@@ -1,0 +1,118 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, BASE } from '../config';
+import '../styles/global.css';
+
+interface Props {
+  /** 页面标题（不含站点名） */
+  title: string;
+  /** 页面描述 */
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const siteOrigin = Astro.site ?? 'https://bitoolkit.github.io';
+const base = BASE;
+const canonical = new URL(Astro.url.pathname, siteOrigin);
+const ogImage = new URL(`og.png`, new URL(base, siteOrigin));
+const pageTitle = `${title} · ${SITE.name}`;
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme="auto">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#2c7a57" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131711" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- 主题初始化：在首帧绘制前完成，避免闪烁 -->
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('bitree-theme');
+          const theme = saved === 'light' || saved === 'dark' ? saved : 'auto';
+          document.documentElement.dataset.theme = theme;
+          const dark =
+            theme === 'dark' ||
+            (theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) {
+          /* 忽略 */
+        }
+      })();
+    </script>
+    <!-- JS 禁用时跳过入场动画，内容直接可见 -->
+    <noscript>
+      <style is:inline>.reveal{opacity:1;transform:none}</style>
+    </noscript>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // 滚动入场：进入视口后淡入并轻微上移
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    padding: 9px 16px;
+    border-radius: 9px;
+    background: var(--brand);
+    color: var(--brand-ink);
+    font-weight: 600;
+    font-size: 0.875rem;
+    transform: translateY(-48px);
+    transition: transform 0.2s var(--ease);
+  }
+
+  .skip-link:focus-visible {
+    transform: none;
+  }
+
+  main {
+    padding-top: var(--header-h);
+  }
+</style>

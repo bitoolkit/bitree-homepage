@@ -1,0 +1,354 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import { BASE, LINKS } from '../config';
+
+
+const steps = [
+  { icon: 'download', title: '下载安装', desc: '在下载页选择你的平台，Android 直接安装 APK，桌面端解压或运行安装包。' },
+  { icon: 'theme', title: '选择外观', desc: '首次启动可按提示选择浅色、深色或跟随系统，之后可随时在设置中更改。' },
+  { icon: 'lock', title: '登录校园账号', desc: '使用学校统一身份认证的账号密码登录；如遇短信或图形验证，按页面提示完成即可。' },
+  { icon: 'sync', title: '同步数据', desc: '按需同步课表、考试、DDL 与成绩。已同步的数据保存在本机，之后可离线查看。' },
+];
+---
+
+<Base
+  title="使用帮助"
+  description="BITree 理枝使用帮助：初次使用流程、校园账号登录与同步、课表日程成绩指南、校园网与 WebVPN 说明、本地数据与隐私、日志导出与问题反馈。"
+>
+  <div class="container">
+    <header class="page-head reveal">
+      <p class="kicker">使用帮助</p>
+      <h1>开始使用理枝</h1>
+      <p>四步开始，再按需了解账号同步、校园网络与数据存放方式。没找到答案时，欢迎到
+        <a href={LINKS.issues} target="_blank" rel="noopener">GitHub Issues</a> 提问。</p>
+    </header>
+
+    <!-- 初次使用 -->
+    <section class="help-section reveal" aria-labelledby="h-start">
+      <h2 id="h-start">初次使用</h2>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step">
+              <span class="step-no">{i + 1}</span>
+              <span class="step-icon">
+                <Icon name={s.icon} size={19} />
+              </span>
+              <div>
+                <b>{s.title}</b>
+                <p>{s.desc}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- 账号与同步 -->
+    <section class="help-section reveal" aria-labelledby="h-account">
+      <h2 id="h-account">校园账号登录与同步</h2>
+      <div class="prose">
+        <p>
+          理枝使用学校统一身份认证账号登录。登录过程由本地客户端直接完成：
+          <b>账号密码和登录会话保存在操作系统的安全存储</b>中，不会写入普通文件。
+        </p>
+        <p>
+          访问教学中心时，应用会同时探测<b>校内直连</b>与 <b>WebVPN</b> 两条线路，
+          自动使用先连通的一条；某条线路中断时会自动尝试另一条，无需手动切换。
+          乐学与新延河课堂使用可校外访问的直连入口。
+        </p>
+        <p>
+          启动时只恢复登录状态，不同步业务数据；课表、日程（DDL、考试）、成绩与学分均按你的操作手动同步。
+          同步 DDL 时会保留本地的编辑、完成与删除状态。
+        </p>
+        <p class="fine">
+          <Icon name="alert" size={14} />
+          登录途中遇到短信或图形验证属于学校认证流程的正常环节。取消验证后账号会保留「需要验证」状态，
+          可在设置的账号项中点击「验证」重新完成。
+        </p>
+      </div>
+    </section>
+
+    <!-- 功能指南 -->
+    <section class="help-section reveal" aria-labelledby="h-guide">
+      <h2 id="h-guide">课表、日程与成绩</h2>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <b><Icon name="calendar" size={17} /> 课表</b>
+          <p>同步后按周查看，横滑切换周次，浏览其他周时用「回到本周」返回。支持手动添加课程、导出 ICS 到系统日历。点击课程可查看详情与下一门课的换楼关系。</p>
+        </div>
+        <div class="guide-card">
+          <b><Icon name="clock" size={17} /> 日程</b>
+          <p>提供列表与瀑布时间轴两种视图。右上角导入菜单可分别更新乐学、新延河课堂与大物实验的 DDL。列表中可滑动完成或删除，已删除的 DDL 可单独恢复。</p>
+        </div>
+        <div class="guide-card">
+          <b><Icon name="chart" size={17} /> 成绩</b>
+          <p>同步全部学期成绩后自动计算绩点与加权平均分，同一课程取最高成绩。试算页可添加拟修或重修课程预测绩点变化，不影响已保存成绩。</p>
+        </div>
+        <div class="guide-card">
+          <b><Icon name="door" size={17} /> 空教室</b>
+          <p>选择校区、教学楼与日期后查看各节次占用，也可筛选指定时段全程空闲的教室。需要先完成校园账号登录。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 校园网 -->
+    <section class="help-section reveal" aria-labelledby="h-network">
+      <h2 id="h-network">校园网与 WebVPN</h2>
+      <div class="prose">
+        <p>
+          在校内网时通常走直连更快；在校外时 WebVPN 线路一般先连通。理枝每次操作都会并行探测两条线路并选择先响应的一条，
+          你不需要判断自己身处哪种网络环境，也不需要在应用里手动切换。
+        </p>
+        <p>
+          如果同步持续失败，可先在浏览器中确认统一身份认证能否正常登录，再于应用内重试；
+          仍然失败时请<a href={LINKS.newIssue} target="_blank" rel="noopener">提交 Issue</a> 并附上导出的日志。
+        </p>
+      </div>
+    </section>
+
+    <!-- 数据与隐私 -->
+    <section class="help-section reveal" aria-labelledby="h-data">
+      <h2 id="h-data">本地数据与隐私</h2>
+      <div class="prose">
+        <p>
+          课表与日程保存在本机；账号凭据使用系统安全存储；对校园服务的请求由本地直接发起，
+          <b>不经过任何第三方中转服务器</b>。已保存的课表和日程随时可以离线查看。
+        </p>
+        <p>
+          日志在本地保留七天，可在 <b>设置 → 导出日志</b> 中预览最近 100 行或导出日志文件，
+          文件包含构建版本与运行环境信息，便于排查问题。
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="help-section reveal" aria-labelledby="h-faq">
+      <h2 id="h-faq">常见问题</h2>
+      <div class="faq-list">
+        <Faq q="登录时提示需要短信或图形验证，怎么办？">
+          <p>这是学校统一身份认证的正常环节，在应用内按提示完成验证即可继续。取消验证后账号会保留「需要验证」状态，前往设置的账号项点击「验证」可重新进入验证流程。</p>
+        </Faq>
+        <Faq q="在校外（不连校园网）可以使用吗？">
+          <p>可以。教学中心的数据会通过 WebVPN 线路获取；乐学与新延河课堂本身支持校外直连。已保存的课表和日程不联网也能查看。</p>
+        </Faq>
+        <Faq q="我的数据保存在哪里？换手机会丢失吗？">
+          <p>课表、日程与学业数据都以文件形式保存在当前设备的本机存储中，不上传云端。更换设备后重新登录同一账号并同步，即可取回学校侧的数据；本地手动添加的内容需要重新录入。</p>
+        </Faq>
+        <Faq q="卸载应用会清除数据吗？">
+          <p>会。理枝没有云端账户体系，卸载应用会连同本机数据一起删除，请谨慎操作。</p>
+        </Faq>
+        <Faq q="绩点是怎么计算的？">
+          <p>采用学校公布的本科生绩点计算规则，同一课程取最高成绩计入。规则原文见<a href={LINKS.gpaRule} target="_blank" rel="noopener">学校教务页面</a>。理枝还会同时给出加权平均分与学期表现。</p>
+        </Faq>
+        <Faq q="macOS 打开时提示「无法验证开发者」或「已损坏」？">
+          <p>当前版本未签名，被 macOS Gatekeeper 拦截。前往「系统设置 → 隐私与安全性」，在底部点击「仍要打开」后再启动即可。提示「已损坏」时，可先确认压缩包是否完整解压。</p>
+        </Faq>
+        <Faq q="iOS 版怎么安装？">
+          <p>iOS 的 IPA 安装包未签名，需要使用自签工具或开发者证书完成签名后，通过侧载方式安装到设备。相关工具与步骤请以 GitHub Releases 页面说明为准。</p>
+        </Faq>
+        <Faq q="忘记密码或登录一直失败？">
+          <p>理枝使用学校统一身份认证的账号密码，与你在其他校园系统使用的一致。忘记密码请通过学校统一身份认证平台重置；重置后仍无法登录，可带日志到 Issues 反馈。</p>
+        </Faq>
+        <Faq q="如何反馈问题或建议？">
+          <p>先在「设置 → 导出日志」中导出日志文件（含构建版本与运行环境），然后到<a href={LINKS.newIssue} target="_blank" rel="noopener"> GitHub Issues</a> 提交新问题并附上日志。功能建议同样欢迎。</p>
+        </Faq>
+      </div>
+    </section>
+
+    <p class="help-foot reveal">
+      以上说明基于仓库当前文档整理；如与应用实际行为不一致，以应用内提示与
+      <a href={LINKS.repo} target="_blank" rel="noopener">GitHub 仓库</a>为准。
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(40px, 6vw, 72px) clamp(16px, 2vw, 28px);
+    max-width: 720px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+  }
+
+  .page-head p {
+    margin-top: 14px;
+    color: var(--text-2);
+  }
+
+  .help-section {
+    padding-block: clamp(24px, 3.4vw, 40px);
+    max-width: 780px;
+  }
+
+  .help-section + .help-section {
+    border-top: 1px solid var(--line);
+  }
+
+  .help-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .help-section h2::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brand);
+    box-shadow: 0 0 0 3.5px var(--brand-soft);
+  }
+
+  /* 步骤 */
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    position: relative;
+    transition: transform 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+
+  .step:hover {
+    transform: translateY(-2px);
+    border-color: var(--brand-line);
+  }
+
+  .step-no {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-3);
+  }
+
+  .step-icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+
+  .step b {
+    font-size: 0.95rem;
+  }
+
+  .step p {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  /* 正文 */
+  .prose p {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    line-height: 1.85;
+  }
+
+  .prose p + p {
+    margin-top: 12px;
+  }
+
+  .prose b {
+    color: var(--text);
+  }
+
+  .prose .fine {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    margin-top: 18px;
+    padding: 13px 16px;
+    border-radius: var(--radius-s);
+    background: var(--amber-soft);
+    border: 1px solid color-mix(in srgb, var(--amber) 28%, transparent);
+    font-size: 0.855rem;
+  }
+
+  .prose .fine svg {
+    flex: none;
+    color: var(--amber);
+    margin-top: 4px;
+  }
+
+  /* 功能指南 */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .guide-card {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .guide-card b {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 0.95rem;
+  }
+
+  .guide-card b :global(svg) {
+    color: var(--brand);
+  }
+
+  .guide-card p {
+    margin-top: 9px;
+    font-size: 0.85rem;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  /* FAQ */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .help-foot {
+    margin-block: clamp(30px, 4vw, 48px);
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 0.8125rem;
+    color: var(--text-3);
+    max-width: 780px;
+  }
+
+  @media (max-width: 680px) {
+    .steps,
+    .guide-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

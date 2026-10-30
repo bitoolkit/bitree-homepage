@@ -1,0 +1,271 @@
+---
+import Icon from './Icon.astro';
+import DevicePreview from './DevicePreview.astro';
+import MockTimetable from './mocks/MockTimetable.astro';
+import MockAgenda from './mocks/MockAgenda.astro';
+import MockGrades from './mocks/MockGrades.astro';
+import MockClassroom from './mocks/MockClassroom.astro';
+import { BASE } from '../config';
+
+const more = [
+  { icon: 'chart', name: '成绩试算', desc: '试算绩点、倒推目标成绩' },
+  { icon: 'branch', name: '毕业学分进度', desc: '分类目标与完成情况' },
+  { icon: 'alert', name: '考试冲突检查', desc: '对照课表与考试安排' },
+  { icon: 'widget', name: 'Android 小组件', desc: '桌面直达课程与日程' },
+];
+---
+
+<section class="section" id="features">
+  <div class="container">
+    <header class="section-head reveal">
+      <p class="kicker">核心功能</p>
+      <h2>大学生活，有条有理。</h2>
+      <p>从课表到成绩，理枝把你每天要惦记的事，收进一个轻巧的本地应用。</p>
+    </header>
+
+    <div class="bento">
+      <article class="bento-card c-timetable reveal">
+        <div class="bento-text">
+          <h3>课程表</h3>
+          <p>同步学校课表，也可手动添加。按周查看、显示当前时间，支持导出 ICS。</p>
+        </div>
+        <div class="bento-visual">
+          <DevicePreview variant="window">
+            <MockTimetable />
+          </DevicePreview>
+        </div>
+      </article>
+
+      <article class="bento-card c-agenda reveal" style="--reveal-delay: 90ms">
+        <div class="bento-text">
+          <h3>日程与 DDL</h3>
+          <p>统一管理考试、活动与截止日期，同步乐学、新延河课堂的 DDL 与完成状态。</p>
+        </div>
+        <div class="bento-visual">
+          <DevicePreview variant="phone" ratio="9/16.4">
+            <MockAgenda />
+          </DevicePreview>
+        </div>
+      </article>
+
+      <article class="bento-card c-grades reveal" style="--reveal-delay: 40ms">
+        <div class="bento-text">
+          <h3>成绩与绩点</h3>
+          <p>同步全部学期成绩，按学校规则计算绩点，同一课程取最高成绩。</p>
+        </div>
+        <div class="bento-visual">
+          <DevicePreview variant="window">
+            <MockGrades />
+          </DevicePreview>
+        </div>
+      </article>
+
+      <article class="bento-card c-classroom reveal" style="--reveal-delay: 120ms">
+        <div class="bento-text">
+          <h3>空教室查询</h3>
+          <p>按校区、教学楼和日期查看空闲时段，也能筛选指定时段全程空闲的教室。</p>
+        </div>
+        <div class="bento-visual">
+          <DevicePreview variant="window">
+            <MockClassroom />
+          </DevicePreview>
+        </div>
+      </article>
+
+      <article class="bento-card c-more reveal" style="--reveal-delay: 200ms">
+        <div class="bento-text">
+          <h3>还有更多</h3>
+          <p>围绕学业与日常的辅助能力，按你需要时出现。</p>
+        </div>
+        <ul class="more-list">
+          {
+            more.map((m) => (
+              <li>
+                <span class="more-icon">
+                  <Icon name={m.icon} size={18} />
+                </span>
+                <div>
+                  <b>{m.name}</b>
+                  <span>{m.desc}</span>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="link-quiet more-link" href={`${BASE}features/`}>
+          查看全部功能
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+  }
+
+  .bento-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--shadow-s);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
+  }
+
+  .bento-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--brand-line);
+    box-shadow: var(--shadow-m);
+  }
+
+  /* 品牌细节：标题下的短枝线，悬停时生长 */
+  .bento-text h3 {
+    font-size: 1.0625rem;
+    display: inline-block;
+  }
+
+  .bento-text h3::after {
+    content: '';
+    display: block;
+    width: 22px;
+    height: 2px;
+    margin-top: 7px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand), transparent);
+    transition: width 0.3s var(--ease);
+  }
+
+  .bento-card:hover .bento-text h3::after {
+    width: 46px;
+  }
+
+  .bento-text p {
+    margin-top: 10px;
+    color: var(--text-2);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .bento-visual {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    margin-block: -4px -8px;
+  }
+
+  .bento-visual :global(.device) {
+    width: 100%;
+  }
+
+  .c-timetable {
+    grid-column: span 7;
+  }
+
+  .c-agenda {
+    grid-column: span 5;
+  }
+
+  .c-grades,
+  .c-classroom,
+  .c-more {
+    grid-column: span 4;
+  }
+
+  .more-list {
+    list-style: none;
+    margin: 2px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .more-list li {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 9px 10px;
+    border-radius: var(--radius-s);
+    transition: background-color 0.18s var(--ease);
+  }
+
+  .more-list li:hover {
+    background: var(--surface-2);
+  }
+
+  .more-icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+
+  .more-list b {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 620;
+  }
+
+  .more-list li > div > span {
+    font-size: 0.78rem;
+    color: var(--text-3);
+  }
+
+  .more-link {
+    margin-top: auto;
+    align-self: flex-start;
+    font-size: 0.875rem;
+    font-weight: 570;
+  }
+
+  @media (max-width: 1024px) {
+    .c-timetable {
+      grid-column: span 12;
+    }
+
+    .c-agenda {
+      grid-column: span 6;
+    }
+
+    .c-grades,
+    .c-classroom,
+    .c-more {
+      grid-column: span 6;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .bento {
+      grid-template-columns: 1fr;
+    }
+
+    .c-timetable,
+    .c-agenda,
+    .c-grades,
+    .c-classroom,
+    .c-more {
+      grid-column: 1 / -1;
+    }
+
+    .c-agenda .bento-visual :global(.device) {
+      max-width: 300px;
+      margin-inline: auto;
+    }
+  }
+</style>

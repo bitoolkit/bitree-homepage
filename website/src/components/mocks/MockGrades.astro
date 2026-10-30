@@ -1,0 +1,222 @@
+---
+// 学业成绩示意界面：绩点概览 + 学期成绩列表 + 学期表现。
+const grades = [
+  { name: '高等数学(理)Ⅱ', score: 92, gp: '4.0', credit: '5.0' },
+  { name: '数据结构', score: 94, gp: '4.0', credit: '4.0' },
+  { name: '线性代数', score: 88, gp: '3.7', credit: '3.0' },
+  { name: '大学英语Ⅲ', score: 85, gp: '3.3', credit: '2.0' },
+  { name: '大学物理', score: 90, gp: '4.0', credit: '4.0' },
+];
+const semesters = ['2024 秋', '2025 春', '2025 秋', '2026 秋'];
+const trend = [
+  { label: '24 秋', v: 84 },
+  { label: '25 春', v: 86 },
+  { label: '25 秋', v: 89 },
+  { label: '26 秋', v: 91 },
+];
+---
+
+<div class="app mock-grades">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">成绩与学业</div>
+      <div class="app-sub">同一课程按最高成绩计入</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip is-active">2026 秋</span>
+    <span class="app-icon-btn" aria-hidden="true">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 10 12 3 5 10M19 4v17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+  </div>
+
+  <div class="app-body grades">
+    <div class="summary">
+      <div class="stat">
+        <em>3.72</em>
+        <span>累计绩点</span>
+      </div>
+      <div class="stat">
+        <em>87.6</em>
+        <span>加权平均分</span>
+      </div>
+      <div class="stat">
+        <em>96<i>/165</i></em>
+        <span>已修学分</span>
+      </div>
+      <div class="trend" aria-hidden="true">
+        {trend.map((t) => <div class="bar" style={`--v: ${t.v}%`}><b style={`height: ${(t.v - 70) * 2.6}%`}></b><span>{t.label}</span></div>)}
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="row head">
+        <span>课程</span><span>成绩</span><span>绩点</span><span>学分</span>
+      </div>
+      {
+        grades.map((g) => (
+          <div class="row">
+            <span class="name">{g.name}</span>
+            <span class="score">{g.score}</span>
+            <span class="gp">{g.gp}</span>
+            <span class="credit">{g.credit}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .grades {
+    display: grid;
+    grid-template-columns: 208px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+  }
+
+  .summary {
+    grid-row: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stat {
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .stat em {
+    font-style: normal;
+    font-size: 17px;
+    font-weight: 720;
+    letter-spacing: -0.01em;
+  }
+
+  .stat em i {
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 550;
+    color: #a3a198;
+  }
+
+  .stat span {
+    font-size: 9.5px;
+    color: #8a887f;
+  }
+
+  .trend {
+    flex: 1;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 10px 12px 8px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 92px;
+  }
+
+  .bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar b {
+    width: 100%;
+    max-width: 16px;
+    border-radius: 4px 4px 2px 2px;
+    background: color-mix(in srgb, var(--app-copper) 68%, #f3e2d6);
+  }
+
+  .bar:nth-child(4) b {
+    background: var(--app-copper);
+  }
+
+  .bar span {
+    font-size: 8px;
+    color: #a3a198;
+  }
+
+  .list {
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 42px 38px 38px;
+    align-items: center;
+    padding: 0 12px;
+    flex: 1;
+    min-height: 30px;
+    font-size: 10.5px;
+    border-bottom: 1px solid #f0eee7;
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  .row.head {
+    background: #faf9f4;
+    font-size: 9px;
+    color: #a3a198;
+    min-height: 26px;
+  }
+
+  .row .name {
+    font-weight: 570;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .row .score {
+    font-weight: 680;
+    text-align: right;
+  }
+
+  .row .gp {
+    color: var(--app-copper);
+    font-weight: 640;
+    text-align: right;
+  }
+
+  .row .credit {
+    color: #a3a198;
+    text-align: right;
+  }
+
+  @media (max-width: 620px) {
+    .grades {
+      grid-template-columns: 1fr;
+    }
+
+    .summary {
+      grid-row: auto;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .trend {
+      min-height: 70px;
+      flex-basis: 100%;
+    }
+  }
+</style>

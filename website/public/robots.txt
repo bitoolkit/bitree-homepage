@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bitoolkit.github.io/bitree-homepage/sitemap-index.xml

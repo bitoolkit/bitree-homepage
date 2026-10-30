@@ -1,0 +1,176 @@
+---
+import Icon from './Icon.astro';
+import DevicePreview from './DevicePreview.astro';
+import MockCredits from './mocks/MockCredits.astro';
+import MockWidget from './mocks/MockWidget.astro';
+import { BASE, PLATFORMS } from '../config';
+
+---
+
+<section class="section" id="platforms">
+  <div class="container">
+    <header class="section-head reveal">
+      <p class="kicker">跨平台</p>
+      <h2>常用设备，始终如一。</h2>
+      <p>一套代码，五端一致的手感。手机上看课表，电脑上对成绩，数据都在你自己手里。</p>
+    </header>
+
+    <div class="platform-stage reveal">
+      <div class="stage-copy">
+        <h3>桌面与移动，同一份体验</h3>
+        <p>
+          BITree 使用 Flutter 构建，界面与交互在 Android、Windows、macOS、Linux 与 iOS
+          上保持一致；课表、日程与学业数据保存在本机，换设备也只需重新同步。
+        </p>
+        <a class="btn btn--soft" href={`${BASE}download/`}>
+          <Icon name="download" size={16} />
+          前往下载
+        </a>
+      </div>
+
+      <div class="stage-devices" aria-hidden="true">
+        <DevicePreview variant="window" class="stage-window">
+          <MockCredits />
+        </DevicePreview>
+        <DevicePreview variant="phone" ratio="9/16.2" class="stage-phone">
+          <MockWidget />
+        </DevicePreview>
+      </div>
+    </div>
+
+    <ul class="platform-strip" role="list">
+      {
+        PLATFORMS.map((p, i) => (
+          <li class="reveal" style={`--reveal-delay: ${i * 70}ms`}>
+            <Icon name={p.id} size={22} class="p-icon" />
+            <b>{p.name}</b>
+            <span>{p.format.replace('（未签名）', '')}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .platform-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(28px, 4vw, 56px);
+    align-items: center;
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+
+  .stage-copy h3 {
+    font-size: 1.3rem;
+    margin-bottom: 14px;
+  }
+
+  .stage-copy p {
+    color: var(--text-2);
+    margin-bottom: 24px;
+  }
+
+  .stage-devices {
+    position: relative;
+    padding-bottom: clamp(28px, 4vw, 52px);
+  }
+
+  .stage-window {
+    width: 86%;
+    margin-left: 0;
+  }
+
+  .stage-phone {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: clamp(110px, 22%, 168px);
+    animation: stage-float 8s ease-in-out infinite;
+  }
+
+  @keyframes stage-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  .platform-strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-block: 1px solid var(--line);
+  }
+
+  .platform-strip li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 22px 20px;
+    border-right: 1px solid var(--line);
+    transition: background-color 0.2s var(--ease);
+  }
+
+  .platform-strip li:last-child {
+    border-right: none;
+  }
+
+  .platform-strip li:hover {
+    background: var(--surface-2);
+  }
+
+  .p-icon {
+    color: var(--brand);
+  }
+
+  .platform-strip b {
+    font-size: 0.95rem;
+    font-weight: 640;
+  }
+
+  .platform-strip span {
+    font-size: 0.78rem;
+    color: var(--text-3);
+  }
+
+  @media (max-width: 960px) {
+    .platform-stage {
+      grid-template-columns: 1fr;
+    }
+
+    .platform-strip {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .platform-strip li:nth-child(3n) {
+      border-right: none;
+    }
+
+    .platform-strip li:nth-child(-n + 3) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 620px) {
+    .platform-strip {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .platform-strip li {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .platform-strip li:last-child,
+    .platform-strip li:nth-last-child(2) {
+      border-bottom: none;
+    }
+  }
+</style>

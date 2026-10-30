@@ -1,0 +1,117 @@
+---
+import Icon from './Icon.astro';
+import { BASE, LINKS } from '../config';
+
+---
+
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta reveal">
+      <svg class="cta-branch" viewBox="0 0 720 60" fill="none" aria-hidden="true">
+        <path class="line" d="M0 30 C 120 30, 180 12, 260 22 C 330 31, 360 44, 430 38 C 500 32, 560 18, 720 26" />
+        <circle class="nd" cx="260" cy="22" r="3" />
+        <circle class="nd" cx="430" cy="38" r="3.6" />
+        <circle class="nd" cx="580" cy="21" r="2.6" />
+      </svg>
+
+      <h2>从今天开始，用理枝整理校园生活。</h2>
+      <p>下载 BITree，登录校园账号，几分钟就能同步你的课表与日程。</p>
+
+      <div class="cta-actions">
+        <a class="btn btn--primary btn--lg" href={`${BASE}download/`}>
+          <Icon name="download" size={18} />
+          下载 BITree
+        </a>
+        <a class="btn btn--ghost btn--lg" href={LINKS.repo} target="_blank" rel="noopener">
+          <Icon name="github" size={17} />
+          查看源代码
+        </a>
+      </div>
+
+      <p class="cta-meta">免费开源 · Unlicense · Android / Windows / macOS / Linux / iOS</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    padding-bottom: clamp(72px, 9vw, 120px);
+  }
+
+  .cta {
+    position: relative;
+    text-align: center;
+    padding: clamp(48px, 7vw, 80px) clamp(20px, 6vw, 80px);
+    border-radius: clamp(18px, 3vw, 28px);
+    background:
+      radial-gradient(120% 140% at 50% -30%, color-mix(in srgb, var(--brand) 10%, var(--surface)), var(--surface) 62%);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-m);
+    overflow: hidden;
+  }
+
+  .cta-branch {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 22px;
+    width: 100%;
+    height: 46px;
+    color: var(--brand);
+    opacity: 0.5;
+  }
+
+  .cta-branch .line {
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-dasharray: 760;
+    stroke-dashoffset: 760;
+    transition: stroke-dashoffset 1.8s var(--ease);
+  }
+
+  .cta-branch .nd {
+    fill: currentColor;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease);
+  }
+
+  :global(.is-in) .cta-branch .line {
+    stroke-dashoffset: 0;
+  }
+
+  :global(.is-in) .cta-branch .nd {
+    opacity: 0.6;
+    transition-delay: 0.9s;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3.4vw, 2.15rem);
+  }
+
+  .cta > p:not(.cta-meta) {
+    margin-top: 14px;
+    color: var(--text-2);
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 32px;
+  }
+
+  .btn--lg {
+    min-height: 52px;
+    padding: 13px 28px;
+    font-size: 1rem;
+  }
+
+  .cta-meta {
+    margin-top: 26px;
+    font-size: 0.8125rem;
+    color: var(--text-3);
+    letter-spacing: 0.04em;
+  }
+</style>

@@ -1,0 +1,353 @@
+---
+import DevicePreview from './DevicePreview.astro';
+import MockTimetable from './mocks/MockTimetable.astro';
+import MockAgenda from './mocks/MockAgenda.astro';
+import MockGrades from './mocks/MockGrades.astro';
+import MockClassroom from './mocks/MockClassroom.astro';
+import MockExams from './mocks/MockExams.astro';
+
+const tabs = [
+  {
+    id: 'timetable',
+    label: '课表',
+    icon: 'calendar',
+    title: '一周课程，尽收眼底',
+    desc: '课程块按楼栋片区着色，正在上的课实时标出进度；横滑换周，「回到本周」随时带你回来。',
+    device: 'window' as const,
+  },
+  {
+    id: 'agenda',
+    label: '日程管理',
+    icon: 'clock',
+    title: 'DDL 到点之前，先到眼前',
+    desc: '列表与瀑布时间轴两种视图；考试、活动与各平台 DDL 按来源着色，右端对齐截止时间，逾期一眼可见。',
+    device: 'phone' as const,
+    ratio: '9/15.8',
+  },
+  {
+    id: 'grades',
+    label: '学业成绩',
+    icon: 'chart',
+    title: '绩点不再需要手算',
+    desc: '同步全部学期成绩，按学校公布的规则计算绩点与加权平均分，同一课程取最高成绩，学期表现趋势直观呈现。',
+    device: 'window' as const,
+  },
+  {
+    id: 'classrooms',
+    label: '空教室',
+    icon: 'door',
+    title: '自习位置，提前找好',
+    desc: '按校区、教学楼与日期筛选，查看每间教室各节次的占用情况，也能直接筛出指定时段全程空闲的教室。',
+    device: 'window' as const,
+  },
+  {
+    id: 'exams',
+    label: '考试安排',
+    icon: 'alert',
+    title: '冲突提前发现',
+    desc: '考试安排统一收入日程，自动检查考试之间以及考试与课表的时间冲突，复习计划不被动打乱。',
+    device: 'phone' as const,
+    ratio: '9/15.8',
+  },
+];
+---
+
+<section class="section section--alt" id="showcase">
+  <div class="container">
+    <header class="section-head reveal">
+      <p class="kicker">产品展示</p>
+      <h2>点开看一看，理枝怎么用。</h2>
+      <p>五个核心场景，覆盖一学期里最常打开的页面。</p>
+    </header>
+
+    <div class="showcase reveal" data-showcase>
+      <div class="tablist-wrap">
+        <div class="tablist" role="tablist" aria-label="功能展示" aria-orientation="vertical">
+          {
+            tabs.map((t, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`tab-${t.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                aria-controls={`panel-${t.id}`}
+                tabindex={i === 0 ? 0 : -1}
+                data-tab={t.id}
+                data-title={t.title}
+                data-desc={t.desc}
+                class="tab"
+              >
+                <span class="tab-dot" aria-hidden="true" />
+                {t.label}
+              </button>
+            ))
+          }
+        </div>
+        <p class="tab-desc" data-showcase-desc aria-live="polite">
+          {tabs[0].title}——{tabs[0].desc}
+        </p>
+      </div>
+
+      <div class="stage">
+        <div class="panels">
+          <div class="panel is-active" role="tabpanel" id="panel-timetable" aria-labelledby="tab-timetable">
+            <DevicePreview variant="window"><MockTimetable /></DevicePreview>
+          </div>
+          <div class="panel" role="tabpanel" id="panel-agenda" aria-labelledby="tab-agenda" hidden>
+            <DevicePreview variant="phone" ratio="9/15.8"><MockAgenda /></DevicePreview>
+          </div>
+          <div class="panel" role="tabpanel" id="panel-grades" aria-labelledby="tab-grades" hidden>
+            <DevicePreview variant="window"><MockGrades /></DevicePreview>
+          </div>
+          <div class="panel" role="tabpanel" id="panel-classrooms" aria-labelledby="tab-classrooms" hidden>
+            <DevicePreview variant="window"><MockClassroom /></DevicePreview>
+          </div>
+          <div class="panel" role="tabpanel" id="panel-exams" aria-labelledby="tab-exams" hidden>
+            <DevicePreview variant="phone" ratio="9/15.8"><MockExams /></DevicePreview>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section--alt {
+    background: var(--bg-2);
+    border-block: 1px solid var(--line);
+  }
+
+  .showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: stretch;
+  }
+
+  .tablist-wrap {
+    min-width: 0;
+  }
+
+  .tablist {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 46px;
+    padding: 9px 16px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-s);
+    background: transparent;
+    color: var(--text-2);
+    font: 600 0.9375rem var(--font-sans);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.18s var(--ease), color 0.18s var(--ease),
+      border-color 0.18s var(--ease), padding-left 0.22s var(--ease);
+  }
+
+  .tab .tab-dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--line-2);
+    transition: background-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+
+  .tab:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .tab[aria-selected='true'] {
+    color: var(--brand);
+    background: var(--surface);
+    border-color: var(--brand-line);
+    padding-left: 20px;
+  }
+
+  .tab[aria-selected='true'] .tab-dot {
+    background: var(--brand);
+    box-shadow: 0 0 0 3.5px var(--brand-soft);
+  }
+
+  .tab-desc {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.75;
+    min-height: 5.5em;
+  }
+
+  /* 右侧舞台：容器尺寸稳定，面板交叉淡入 */
+  .stage {
+    min-width: 0;
+  }
+
+  .panels {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    max-height: 620px;
+  }
+
+  .panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    transition: opacity 0.38s var(--ease), transform 0.38s var(--ease);
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .panel.is-active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    visibility: visible;
+    transition-delay: 60ms;
+  }
+
+  .panel :global(.device) {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* 手机面板窄一些，形成桌面 / 移动交替的节奏 */
+  .panel :global(.device--phone) {
+    height: 100%;
+  }
+
+  @media (max-width: 920px) {
+    .showcase {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tablist {
+      position: static;
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 8px;
+      padding-bottom: 10px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+      min-height: 42px;
+      white-space: nowrap;
+      scroll-snap-align: start;
+    }
+
+    .tab[aria-selected='true'] {
+      padding-left: 16px;
+    }
+
+    .tab-desc {
+      min-height: 0;
+      margin-top: 10px;
+      padding-top: 12px;
+    }
+
+    .panels {
+      aspect-ratio: 4 / 3.2;
+    }
+
+    .panel :global(.device--phone) {
+      height: 96%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .panels {
+      aspect-ratio: 1 / 1.06;
+    }
+
+    .panel :global(.device--phone) {
+      height: 100%;
+    }
+  }
+</style>
+
+<script>
+  const showcases = document.querySelectorAll<HTMLElement>('[data-showcase]');
+
+  for (const sc of showcases) {
+    const tabs = Array.from(sc.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(sc.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+    const desc = sc.querySelector<HTMLElement>('[data-showcase-desc]');
+
+    const activate = (tab: HTMLButtonElement) => {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.ariaSelected = String(on);
+        t.tabIndex = on ? 0 : -1;
+      }
+      for (const p of panels) {
+        const on = p.id === `panel-${tab.dataset.tab}`;
+        p.classList.toggle('is-active', on);
+        p.hidden = !on;
+      }
+      if (desc && tab.dataset.title) {
+        desc.classList.remove('anim');
+        void desc.offsetWidth;
+        desc.classList.add('anim');
+        desc.textContent = `${tab.dataset.title}——${tab.dataset.desc}`;
+      }
+      tab.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => activate(tab));
+      tab.addEventListener('keydown', (e) => {
+        const nextKey =
+          e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+        let target = -1;
+        if (nextKey) target = (i + nextKey + tabs.length) % tabs.length;
+        else if (e.key === 'Home') target = 0;
+        else if (e.key === 'End') target = tabs.length - 1;
+        if (target >= 0) {
+          e.preventDefault();
+          const t = tabs[target];
+          if (t) {
+            activate(t);
+            t.focus();
+          }
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .tab-desc.anim {
+    animation: desc-in 0.4s var(--ease);
+  }
+
+  @keyframes desc-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

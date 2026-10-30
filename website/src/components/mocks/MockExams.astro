@@ -1,0 +1,122 @@
+---
+// 考试安排示意界面：考试列表 + 与课表的冲突检查结果。
+const exams = [
+  { name: '大学物理 期中考试', time: '11-08 周日 14:00', room: '综教 A-305', ok: true },
+  { name: '高等数学 期中考试', time: '11-11 周三 18:30', room: '综教 B-202', ok: true },
+  { name: '数据结构 期中测验', time: '11-08 周日 14:00', room: '文萃 F-102', ok: false },
+];
+---
+
+<div class="app mock-exams">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">考试安排</div>
+      <div class="app-sub">2026 秋季学期 · 3 场</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip">同步</span>
+  </div>
+
+  <div class="app-body exam-list">
+    {
+      exams.map((e) => (
+        <div class:list={['exam', { conflict: !e.ok }]}>
+          <div class="when">
+            <b>{e.time.slice(5, 7)}</b>
+            <span>{e.time.slice(0, 5)}</span>
+          </div>
+          <div class="what">
+            <b>{e.name}</b>
+            <span>{e.time.slice(e.time.indexOf(' ') + 1)} · {e.room}</span>
+            {!e.ok && (
+              <em>
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 4 2.8 19.5h18.4L12 4Z" stroke-linejoin="round"/><path d="M12 10v4.2" stroke-linecap="round"/></svg>
+                与 1 场考试时间冲突
+              </em>
+            )}
+          </div>
+        </div>
+      ))
+    }
+    <p class="note">冲突检查同时对照已保存的课表时间。</p>
+  </div>
+</div>
+
+<style>
+  .exam-list {
+    gap: 8px;
+  }
+
+  .exam {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  .exam.conflict {
+    border-color: color-mix(in srgb, var(--src-exam) 46%, #fff);
+    background: color-mix(in srgb, var(--src-exam) 7%, #fff);
+  }
+
+  .when {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    border-radius: 8px;
+    background: #f4f2ea;
+    padding: 4px 0;
+  }
+
+  .when b {
+    font-size: 14px;
+    font-weight: 720;
+    color: var(--app-copper);
+  }
+
+  .when span {
+    font-size: 8px;
+    color: #a3a198;
+  }
+
+  .what {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .what b {
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .what span {
+    font-size: 9px;
+    color: #8a887f;
+  }
+
+  .what em {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-style: normal;
+    font-size: 9px;
+    font-weight: 620;
+    color: color-mix(in srgb, var(--src-exam) 72%, #3c2b16);
+    margin-top: 2px;
+  }
+
+  .note {
+    margin-top: auto;
+    font-size: 8.5px;
+    color: #a3a198;
+    padding-left: 2px;
+  }
+</style>
