@@ -5,13 +5,21 @@ import { BASE, LINKS } from '../config';
 
 const path = Astro.url.pathname;
 
-const navItems = [
-  { href: `${BASE}features/`, label: '功能' },
-  { href: `${BASE}download/`, label: '下载' },
-  { href: `${BASE}help/`, label: '使用帮助' },
-];
+const normalizedPath = `${path.replace(/\/index\.html$/, '/').replace(/\/+$/, '')}/`;
+const isHomepage = normalizedPath === BASE;
+const navItems = isHomepage
+  ? [
+      { href: '#features', label: '功能概览' },
+      { href: '#privacy', label: '隐私与数据' },
+      { href: `${BASE}help/`, label: '使用帮助' },
+    ]
+  : [
+      { href: `${BASE}features/`, label: '功能' },
+      { href: `${BASE}download/`, label: '下载' },
+      { href: `${BASE}help/`, label: '使用帮助' },
+    ];
 
-const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
+const isActive = (href: string) => normalizedPath === href;
 ---
 
 <header class="site-header" data-header>
@@ -35,11 +43,21 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
     </nav>
 
     <div class="nav-actions">
-      <a class="icon-link" href={LINKS.repo} target="_blank" rel="noopener" aria-label="GitHub 仓库">
+      <a
+        class="icon-link"
+        href={LINKS.repo}
+        target="_blank"
+        rel="noopener"
+        aria-label="GitHub 仓库"
+      >
         <Icon name="github" size={19} />
       </a>
       <ThemeToggle />
-      <a class="btn btn--primary btn--nav" href={`${BASE}download/`}>
+      <a
+        class="btn btn--primary btn--nav"
+        href={`${BASE}download/`}
+        aria-label="下载理枝"
+      >
         <Icon name="download" size={17} />
         <span>下载</span>
       </a>
@@ -61,7 +79,10 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
     <nav aria-label="移动端导航">
       {
         navItems.map((item) => (
-          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
             {item.label}
           </a>
         ))
@@ -84,8 +105,11 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
     align-items: center;
     background: color-mix(in srgb, var(--bg) 72%, transparent);
     border-bottom: 1px solid transparent;
-    transition: height 0.25s var(--ease), background-color 0.25s var(--ease),
-      border-color 0.25s var(--ease), backdrop-filter 0.25s var(--ease);
+    transition:
+      height 0.25s var(--ease),
+      background-color 0.25s var(--ease),
+      border-color 0.25s var(--ease),
+      backdrop-filter 0.25s var(--ease);
   }
 
   .site-header.is-scrolled {
@@ -187,7 +211,9 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
     height: 40px;
     border-radius: 10px;
     color: var(--text-2);
-    transition: color 0.18s var(--ease), background-color 0.18s var(--ease),
+    transition:
+      color 0.18s var(--ease),
+      background-color 0.18s var(--ease),
       border-color 0.18s var(--ease);
   }
 
@@ -285,7 +311,8 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
 
 <script>
   const header = document.querySelector<HTMLElement>('[data-header]');
-  const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menuBtn =
+    document.querySelector<HTMLButtonElement>('[data-menu-button]');
   const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
 
   const onScroll = () => {
@@ -311,7 +338,10 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
   }
 
   function onOutside(e: Event) {
-    if (!menu?.contains(e.target as Node) && !menuBtn?.contains(e.target as Node)) {
+    if (
+      !menu?.contains(e.target as Node) &&
+      !menuBtn?.contains(e.target as Node)
+    ) {
       setMenu(false);
     }
   }
@@ -324,14 +354,18 @@ const isActive = (href: string) => path.replace(/\/index\.html$/, '/') === href;
   }
 
   menuBtn?.addEventListener('click', () => setMenu(menu?.hidden ?? false));
-  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  menu
+    ?.querySelectorAll('a')
+    .forEach((a) => a.addEventListener('click', () => setMenu(false)));
 </script>
 
 <style>
   .mobile-menu {
     opacity: 0;
     transform: translateY(-6px) scale(0.99);
-    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+    transition:
+      opacity 0.2s var(--ease),
+      transform 0.2s var(--ease);
   }
 
   .mobile-menu.is-open {

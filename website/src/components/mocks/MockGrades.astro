@@ -1,4 +1,6 @@
 ---
+import Icon from '../Icon.astro';
+
 // 学业成绩示意界面：绩点概览 + 学期成绩列表 + 学期表现。
 const grades = [
   { name: '高等数学(理)Ⅱ', score: 92, gp: '4.0', credit: '5.0' },
@@ -25,7 +27,7 @@ const trend = [
     <span class="spacer"></span>
     <span class="app-chip is-active">2026 秋</span>
     <span class="app-icon-btn" aria-hidden="true">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 10 12 3 5 10M19 4v17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <Icon name="sort-grades" size={11} />
     </span>
   </div>
 

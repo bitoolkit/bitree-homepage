@@ -9,9 +9,11 @@ interface Props {
   title: string;
   /** 页面描述 */
   description: string;
+  /** 首页使用独立视觉令牌，不影响其他页面。 */
+  homepage?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, homepage = false } = Astro.props;
 const siteOrigin = Astro.site ?? 'https://bitoolkit.github.io';
 const base = BASE;
 const canonical = new URL(Astro.url.pathname, siteOrigin);
@@ -20,7 +22,7 @@ const pageTitle = `${title} · ${SITE.name}`;
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="auto">
+<html lang="zh-CN" data-theme="auto" class:list={{ homepage }}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,8 +31,16 @@ const pageTitle = `${title} · ${SITE.name}`;
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#2c7a57" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#131711" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content={homepage ? '#fafaf5' : '#2c7a57'}
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content={homepage ? '#151d18' : '#131711'}
+      media="(prefers-color-scheme: dark)"
+    />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />
@@ -55,7 +65,8 @@ const pageTitle = `${title} · ${SITE.name}`;
           document.documentElement.dataset.theme = theme;
           const dark =
             theme === 'dark' ||
-            (theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+            (theme === 'auto' &&
+              matchMedia('(prefers-color-scheme: dark)').matches);
           document.documentElement.classList.toggle('dark', dark);
         } catch (e) {
           /* 忽略 */
@@ -64,7 +75,12 @@ const pageTitle = `${title} · ${SITE.name}`;
     </script>
     <!-- JS 禁用时跳过入场动画，内容直接可见 -->
     <noscript>
-      <style is:inline>.reveal{opacity:1;transform:none}</style>
+      <style is:inline>
+        .reveal {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
     </noscript>
   </head>
   <body>
@@ -85,13 +101,16 @@ const pageTitle = `${title} · ${SITE.name}`;
             }
           }
         },
-        { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
       // 兜底：入场动画全部结束后强制显示 fade-up 元素，
       // 防止动画被暂停或异常时内容停留在透明初始态
-      setTimeout(() => document.documentElement.classList.add('anim-done'), 1600);
+      setTimeout(
+        () => document.documentElement.classList.add('anim-done'),
+        1600,
+      );
     </script>
   </body>
 </html>

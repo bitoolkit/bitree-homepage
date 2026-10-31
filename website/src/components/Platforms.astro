@@ -1,190 +1,186 @@
 ---
 import Icon from './Icon.astro';
-import DevicePreview from './DevicePreview.astro';
-import MockCredits from './mocks/MockCredits.astro';
-import MockWidget from './mocks/MockWidget.astro';
 import { BASE, PLATFORMS } from '../config';
-
 ---
 
-<section class="section" id="platforms">
+<section
+  class="section platforms-section"
+  id="platforms"
+  aria-labelledby="platforms-title"
+>
   <div class="container">
-    <header class="section-head reveal">
-      <p class="kicker">跨平台</p>
-      <h2>常用设备，始终如一。</h2>
-      <p>一套代码，五端一致的手感。手机上看课表，电脑上对成绩，数据都在你自己手里。</p>
+    <header class="home-section-heading reveal">
+      <div>
+        <p class="section-index">03 / 换个设备，依然顺手</p><h2
+          id="platforms-title"
+        >
+          在你习惯的设备上，<br class="mobile-break" />找到理枝。
+        </h2>
+      </div><p>手机上看课表，电脑上查成绩。<br />五个平台，同样用心。</p>
     </header>
-
-    <div class="platform-stage reveal">
-      <div class="stage-copy">
-        <h3>桌面与移动，同一份体验</h3>
-        <p>
-          BITree 使用 Flutter 构建，界面与交互在 Android、Windows、macOS、Linux 与 iOS
-          上保持一致；课表、日程与学业数据保存在本机，换设备也只需重新同步。
-        </p>
-        <a class="btn btn--soft" href={`${BASE}download/`}>
-          <Icon name="download" size={16} />
-          前往下载
-        </a>
-      </div>
-
-      <div class="stage-devices" aria-hidden="true">
-        <div class="stage-window">
-          <DevicePreview variant="window">
-            <MockCredits />
-          </DevicePreview>
-        </div>
-        <div class="stage-phone">
-          <DevicePreview variant="phone" ratio="9/16.2">
-            <MockWidget />
-          </DevicePreview>
-        </div>
-      </div>
-    </div>
-
-    <ul class="platform-strip" role="list">
+    <div class="platform-grid reveal">
       {
-        PLATFORMS.map((p, i) => (
-          <li class="reveal" style={`--reveal-delay: ${i * 70}ms`}>
-            <span class="p-icon">
-              <Icon name={p.id} size={22} />
-            </span>
-            <b>{p.name}</b>
-            <span>{p.format.replace('（未签名）', '')}</span>
-          </li>
+        PLATFORMS.map((platform) => (
+          <a class="platform" href={`${BASE}download/?platform=${platform.id}`}>
+            <>
+              <span class="platform-top">
+                <>
+                  <Icon
+                    name={platform.id === 'macos' ? 'apple' : platform.id}
+                    size={27}
+                  />
+                  <Icon name="arrow-right" size={15} />
+                </>
+              </span>
+              <h3>{platform.name}</h3>
+              <p>{platform.format.replace('（未签名）', '')}</p>
+              <span class="platform-detail">
+                {platform.id === 'ios'
+                  ? '需自行签名安装'
+                  : platform.id === 'macos'
+                    ? 'Intel 与 Apple 芯片'
+                    : platform.arch}
+              </span>
+            </>
+          </a>
         ))
       }
-    </ul>
+    </div>
+    <div class="platform-note">
+      <p>
+        <Icon name="sync" size={14} /> 各设备数据独立保存，换设备后重新同步校园服务即可。
+      </p><a href={`${BASE}download/`}
+        >安装说明与版本下载 <Icon name="arrow-right" size={14} /></a>
+    </div>
   </div>
 </section>
 
 <style>
-  .platform-stage {
+  .platform-grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(28px, 4vw, 56px);
-    align-items: center;
-    margin-bottom: clamp(36px, 5vw, 56px);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    overflow: hidden;
+    background: var(--surface);
   }
-
-  .stage-copy h3 {
-    font-size: 1.3rem;
-    margin-bottom: 14px;
-  }
-
-  .stage-copy p {
-    color: var(--text-2);
-    margin-bottom: 24px;
-  }
-
-  .stage-devices {
-    position: relative;
-    padding-bottom: clamp(28px, 4vw, 52px);
-  }
-
-  .stage-window {
-    width: 86%;
-  }
-
-  .stage-window :global(.device) {
-    width: 100%;
-  }
-
-  .stage-phone {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: clamp(110px, 22%, 168px);
-    animation: stage-float 8s ease-in-out infinite;
-  }
-
-  .stage-phone :global(.device) {
-    width: 100%;
-    height: 100%;
-  }
-
-  @keyframes stage-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-6px);
-    }
-  }
-
-  .platform-strip {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    border-block: 1px solid var(--line);
-  }
-
-  .platform-strip li {
+  .platform {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 7px;
-    padding: 22px 20px;
+    padding: 25px 23px 22px;
     border-right: 1px solid var(--line);
+    color: var(--text);
     transition: background-color 0.2s var(--ease);
   }
-
-  .platform-strip li:last-child {
-    border-right: none;
+  .platform:last-child {
+    border: 0;
   }
-
-  .platform-strip li:hover {
-    background: var(--surface-2);
-  }
-
-  .p-icon {
+  .platform:hover {
+    background: var(--home-green-card);
     color: var(--brand);
   }
-
-  .platform-strip b {
-    font-size: 0.95rem;
-    font-weight: 640;
+  .platform-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-2);
+    margin-bottom: 29px;
   }
-
-  .platform-strip span {
-    font-size: 0.78rem;
+  .platform-top > :global(svg:last-child) {
+    color: var(--text-3);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+  .platform:hover .platform-top {
+    color: var(--brand);
+  }
+  .platform:hover .platform-top > :global(svg:last-child) {
+    opacity: 1;
+    transform: none;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 550;
+    letter-spacing: -0.015em;
+  }
+  .platform p {
+    font-size: 10px;
+    color: var(--text-2);
+    margin-top: 9px;
+  }
+  .platform-detail {
+    font-size: 8px;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
+  .platform-note {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 18px;
+    font-size: 10px;
+  }
+  .platform-note p,
+  .platform-note a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .platform-note p {
     color: var(--text-3);
   }
-
-  @media (max-width: 960px) {
-    .platform-stage {
-      grid-template-columns: 1fr;
-    }
-
-    .platform-strip {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .platform-strip li:nth-child(3n) {
-      border-right: none;
-    }
-
-    .platform-strip li:nth-child(-n + 3) {
-      border-bottom: 1px solid var(--line);
-    }
+  .platform-note p :global(svg) {
+    flex: none;
   }
-
-  @media (max-width: 620px) {
-    .platform-strip {
-      grid-template-columns: repeat(2, 1fr);
+  .platform-note a {
+    white-space: nowrap;
+    color: var(--text-2);
+  }
+  .platform-note a:hover {
+    color: var(--brand);
+  }
+  .mobile-break {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .platform-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
     }
-
-    .platform-strip li {
-      border-right: none;
+    .platform {
+      grid-column: span 2;
+      padding: 21px 18px;
+    }
+    .platform:nth-child(3) {
+      border-right: 0;
+    }
+    .platform:nth-child(-n + 3) {
       border-bottom: 1px solid var(--line);
     }
-
-    .platform-strip li:last-child,
-    .platform-strip li:nth-last-child(2) {
-      border-bottom: none;
+    .platform:nth-child(n + 4) {
+      grid-column: span 3;
+    }
+    .platform-top {
+      margin-bottom: 24px;
+    }
+    .platform-top > :global(svg:last-child) {
+      opacity: 1;
+      transform: none;
+    }
+    h3 {
+      font-size: 15px;
+    }
+    .platform-note {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 9px;
+    }
+    .mobile-break {
+      display: block;
     }
   }
 </style>

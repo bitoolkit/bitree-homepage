@@ -1,59 +1,84 @@
 ---
 import Icon from './Icon.astro';
-import BranchArt from './BranchArt.astro';
-import DevicePreview from './DevicePreview.astro';
-import MockTimetable from './mocks/MockTimetable.astro';
-import MockAgendaList from './mocks/MockAgendaList.astro';
+import HeroScene from './HeroScene.astro';
 import { BASE, LINKS } from '../config';
-
 ---
 
-<section class="hero">
-  <div class="hero-branch"><BranchArt /></div>
-  <div class="container hero-grid">
-    <div class="hero-copy">
-      <p class="hero-tags fade-up">
-        <span class="pill"><Icon name="laptop" size={14} />跨平台</span>
-        <span class="pill"><Icon name="github" size={14} />开源</span>
-        <span class="pill"><Icon name="lock" size={14} />本地优先</span>
-      </p>
-
-      <h1 class="fade-up" style="--reveal-delay: 90ms">
-        让校园生活，<br />井井有条。
-      </h1>
-
-      <p class="hero-sub fade-up" style="--reveal-delay: 180ms">
-        BITree 理枝，为北京理工大学同学打造的跨平台校园工具。<br class="hero-br" />
-        课表、DDL、成绩与日程，一处管理。
-      </p>
-
-      <div class="hero-actions fade-up" style="--reveal-delay: 270ms">
-        <a class="btn btn--primary" href={`${BASE}download/`}>
-          <Icon name="download" size={17} />
-          立即下载
-        </a>
-        <a class="btn btn--ghost" href={`${BASE}features/`}>
-          了解功能
-          <Icon name="arrow-right" size={16} />
-        </a>
-        <a class="link-quiet hero-repo" href={LINKS.repo} target="_blank" rel="noopener">
-          <Icon name="github" size={16} />
-          GitHub 仓库
-        </a>
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-grain" aria-hidden="true"></div>
+  <div class="container hero-shell">
+    <div class="hero-main">
+      <div class="hero-intro">
+        <div class="hero-heading fade-up">
+          <p class="hero-eyebrow">
+            <span class="eyebrow-mark"><Icon name="branch" size={14} /></span> 为
+            BIT 同学，留一点生活的余地。<span class="eyebrow-line"></span>
+          </p>
+          <h1 id="hero-title">
+            理清日常，<br /><span class="headline-second"
+              >自由<span class="hero-emphasis"
+                >生长<span class="emphasis-leaf" aria-hidden="true"
+                  ><Icon name="leaf" size={25} /></span
+                ></span
+              >。</span>
+          </h1>
+          <p class="hero-english" aria-hidden="true">
+            Less chaos.<span>More campus.</span>
+          </p>
+        </div>
+        <div class="hero-aside fade-up" style="--reveal-delay: 100ms">
+          <p class="hero-sub">
+            课表、DDL、成绩，不必来回寻找。<br />让 <strong>BITree 理枝</strong>
+            整理琐事，<br
+              class="mobile-copy-break"
+            />你只管把校园生活过成喜欢的样子。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn--primary hero-download" href={`${BASE}download/`}
+              ><span>让理枝加入日常</span><Icon
+                name="arrow-right"
+                size={18}
+              /></a
+            >
+            <a
+              class="hero-source"
+              href={LINKS.repo}
+              target="_blank"
+              rel="noopener"
+              ><Icon name="github" size={17} /><span>免费开源</span><Icon
+                name="external"
+                size={12}
+              /></a
+            >
+          </div>
+          <p class="hero-note">
+            <span><Icon name="check" size={12} /> 无广告</span><i></i><span
+              >本地优先</span
+            ><i></i><span>五端可用</span>
+          </p>
+        </div>
+      </div>
+      <div class="hero-visual fade-up" style="--reveal-delay: 180ms">
+        <HeroScene />
       </div>
     </div>
 
-    <div class="hero-devices fade-up" style="--reveal-delay: 200ms">
-      <div class="hero-window">
-        <DevicePreview variant="window">
-          <MockTimetable />
-        </DevicePreview>
+    <div class="hero-bottom">
+      <div class="hero-service-note">
+        <span class="service-kicker">ONE LITTLE APP, LESS LITTLE THINGS.</span
+        ><div class="campus-services" aria-label="支持连接的校园服务">
+          <span>教学中心</span><i></i><span>乐学</span><i></i><span
+            >新延河课堂</span>
+        </div>
       </div>
-      <div class="hero-phone">
-        <DevicePreview variant="phone">
-          <MockAgendaList />
-        </DevicePreview>
-      </div>
+      <a class="hero-scroll" href="#features" aria-label="向下浏览功能概览"
+        ><span>往下看看，少一点忙乱</span><span class="scroll-icon"
+          ><Icon name="chevron-down" size={17} /></span
+        ></a
+      >
+      <span class="hero-edition" aria-hidden="true"
+        >MADE FOR<br /><b>YOUR CAMPUS LIFE.</b></span
+      >
     </div>
   </div>
 </section>
@@ -61,126 +86,792 @@ import { BASE, LINKS } from '../config';
 <style>
   .hero {
     position: relative;
+    display: flex;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
+    isolation: isolate;
     overflow: clip;
-    padding-block: clamp(48px, 7vw, 96px) clamp(56px, 8vw, 110px);
     background:
-      radial-gradient(52% 42% at 78% 12%, var(--brand-soft), transparent 70%),
+      radial-gradient(
+        ellipse at 79% 38%,
+        color-mix(in srgb, var(--home-stage) 65%, transparent),
+        transparent 52%
+      ),
       var(--bg);
   }
-
-  /* 包裹层属于本组件，scoped 定位才能命中；子组件样式用 :global 穿透 */
-  .hero-branch {
+  .hero-grain {
     position: absolute;
-    right: -60px;
-    top: -40px;
-    width: clamp(420px, 46vw, 660px);
+    inset: 0;
     pointer-events: none;
+    background-image: radial-gradient(
+      var(--home-grid) 0.8px,
+      transparent 0.8px
+    );
+    background-size: 6px 6px;
+    opacity: 0.5;
+    z-index: -1;
   }
-
-  .hero-branch :global(svg) {
-    width: 100%;
-    height: auto;
-  }
-
-  .hero-grid {
-    position: relative;
+  .hero-shell {
     display: grid;
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-    gap: clamp(32px, 5vw, 64px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    width: 100%;
+    padding-top: clamp(22px, 4dvh, 52px);
+  }
+  .hero-main {
+    display: grid;
+    grid-template-columns: 1fr 1.08fr;
     align-items: center;
+    gap: 28px;
+    padding-block: 12px clamp(12px, 2dvh, 28px);
   }
-
-  .hero-tags {
+  .hero-intro {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 8px;
+  }
+  .hero-eyebrow {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 9px;
-    margin-bottom: 26px;
-  }
-
-  h1 {
-    font-size: clamp(2.35rem, 5.6vw, 3.6rem);
-    font-weight: 730;
-    letter-spacing: -0.02em;
-    line-height: 1.18;
-  }
-
-  .hero-sub {
-    margin-top: 22px;
-    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    margin-bottom: clamp(21px, 3dvh, 34px);
     color: var(--text-2);
-    max-width: 34em;
+    font-size: 11px;
+    letter-spacing: 0.06em;
   }
-
+  .eyebrow-mark {
+    display: inline-flex;
+    color: var(--brand);
+  }
+  .eyebrow-line {
+    width: 34px;
+    height: 1px;
+    background: var(--line-2);
+    margin-left: 3px;
+  }
+  h1 {
+    position: relative;
+    font-size: clamp(58px, 5.7vw, 82px);
+    font-weight: 600;
+    line-height: 1.24;
+    letter-spacing: -0.065em;
+    white-space: nowrap;
+  }
+  .headline-second {
+    display: inline-block;
+    padding-top: 5px;
+  }
+  .hero-emphasis {
+    position: relative;
+    color: var(--brand);
+    font-family:
+      'Songti SC', 'STSong', 'Noto Serif CJK SC', 'Source Han Serif SC',
+      'SimSun', serif;
+    font-weight: 500;
+    letter-spacing: -0.06em;
+  }
+  .hero-emphasis::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 2px;
+    right: -4px;
+    height: 9px;
+    border-bottom: 2px solid var(--home-orange);
+    border-radius: 50%;
+    transform: rotate(-5deg);
+  }
+  .emphasis-leaf {
+    position: absolute;
+    top: -11px;
+    right: 2px;
+    display: inline-flex;
+    color: var(--brand);
+    transform: rotate(16deg);
+  }
+  .hero-english {
+    font:
+      italic clamp(15px, 1.7vw, 22px) / 1.5 Georgia,
+      serif;
+    color: var(--text-3);
+    margin-top: 18px;
+    letter-spacing: -0.02em;
+  }
+  .hero-english span {
+    color: var(--brand);
+    padding-left: 10px;
+  }
+  .hero-aside {
+    margin-top: clamp(25px, 4dvh, 42px);
+  }
+  .hero-sub {
+    color: var(--text-2);
+    font-size: 13px;
+    line-height: 1.95;
+    letter-spacing: 0.01em;
+  }
+  .hero-sub strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .mobile-copy-break {
+    display: none;
+  }
   .hero-actions {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 14px;
-    margin-top: 34px;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-top: 24px;
   }
-
-  .hero-repo {
-    padding: 8px 4px;
-    font-weight: 550;
+  .hero-download {
+    min-width: 194px;
+    justify-content: space-between;
+    gap: 23px;
+    box-shadow: 0 5px 15px color-mix(in srgb, var(--brand) 9%, transparent);
   }
-
-  /* 设备组合：桌面窗口 + 手机错落叠放 */
-  .hero-devices {
+  .hero-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text-2);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .hero-source:hover {
+    color: var(--brand);
+  }
+  .hero-source > :global(svg:last-child) {
+    color: var(--text-3);
+  }
+  .hero-note {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-3);
+    font-size: 9px;
+    margin-top: 15px;
+  }
+  .hero-note > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .hero-note :global(svg) {
+    color: var(--brand);
+  }
+  .hero-note > i {
+    height: 2px;
+    width: 2px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+  .hero-visual {
+    min-width: 0;
     position: relative;
-    padding-bottom: clamp(36px, 5vw, 64px);
+  }
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 22px;
+    align-items: center;
+    border-top: 1px solid var(--line);
+    min-height: 92px;
+    padding-block: 18px max(18px, env(safe-area-inset-bottom));
+  }
+  .service-kicker {
+    display: block;
+    color: var(--text-3);
+    font: 7px var(--font-mono);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .campus-services {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .campus-services i {
+    height: 3px;
+    width: 3px;
+    border-radius: 50%;
+    background: var(--line-2);
+  }
+  .hero-scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--text-2);
+    font-size: 9px;
+  }
+  .scroll-icon {
+    width: 28px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line-2);
+    border-radius: 17px;
+    transition:
+      border-color 0.2s,
+      transform 0.2s;
+  }
+  .hero-scroll:hover .scroll-icon {
+    border-color: var(--brand);
+    transform: translateY(3px);
+  }
+  .hero-edition {
+    justify-self: end;
+    color: var(--text-3);
+    text-align: right;
+    font: 8px/1.8 var(--font-mono);
+    letter-spacing: 0.1em;
+  }
+  .hero-edition b {
+    font-weight: 400;
+    color: var(--text-2);
   }
 
-  .hero-window :global(.device) {
-    width: 100%;
-  }
-
-  .hero-phone {
-    position: absolute;
-    right: -4%;
-    bottom: 0;
-    width: clamp(140px, 28%, 210px);
-    animation: float 7s ease-in-out infinite;
-  }
-
-  .hero-phone :global(.device) {
-    width: 100%;
-    height: 100%;
-  }
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0);
+  @media (min-width: 1500px) {
+    h1 {
+      font-size: 86px;
     }
-    50% {
-      transform: translateY(-7px);
+    .hero-main {
+      gap: 54px;
+    }
+    .hero-shell {
+      max-width: 1420px;
+    }
+    .hero-sub {
+      font-size: 14px;
+    }
+    .hero-eyebrow {
+      font-size: 12px;
     }
   }
-
-  @media (max-width: 960px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
+  @media (min-width: 901px) and (max-width: 1200px) {
+    h1 {
+      font-size: clamp(52px, 5.8vw, 68px);
     }
-
-    .hero-devices {
-      max-width: 560px;
-      margin-inline: auto;
-      width: 100%;
+    .hero-main {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
-
-    .hero-branch {
-      right: -140px;
-      opacity: 0.5;
+    .hero-actions {
+      gap: 18px;
+    }
+    .hero-download {
+      min-width: 174px;
+    }
+    .hero-sub {
+      font-size: 12px;
+    }
+    .hero-eyebrow {
+      font-size: 9px;
+      gap: 7px;
+    }
+    .eyebrow-line {
+      width: 20px;
     }
   }
-
-  @media (max-width: 480px) {
-    .hero-br {
+  @media (min-width: 901px) and (max-height: 740px) {
+    .hero-shell {
+      padding-top: 12px;
+    }
+    .hero-main {
+      padding-block: 0 13px;
+    }
+    h1 {
+      font-size: clamp(50px, 5vw, 68px);
+    }
+    .hero-eyebrow {
+      margin-bottom: 17px;
+    }
+    .hero-english {
+      margin-top: 11px;
+      font-size: 17px;
+    }
+    .hero-aside {
+      margin-top: 20px;
+    }
+    .hero-actions {
+      margin-top: 18px;
+    }
+    .hero-note {
+      margin-top: 12px;
+    }
+    .hero-bottom {
+      min-height: 74px;
+      padding-block: 12px;
+    }
+  }
+  @media (min-width: 901px) and (max-height: 600px) {
+    h1 {
+      font-size: 48px;
+    }
+    .hero-eyebrow {
+      margin-bottom: 12px;
+    }
+    .hero-english {
+      font-size: 15px;
+      margin-top: 9px;
+    }
+    .hero-aside {
+      margin-top: 15px;
+    }
+    .hero-sub {
+      font-size: 11px;
+      line-height: 1.8;
+    }
+    .hero-actions {
+      margin-top: 15px;
+    }
+    .hero-note {
+      margin-top: 10px;
+    }
+    .hero-main {
+      min-height: 340px;
+    }
+    .hero-bottom {
+      min-height: 61px;
+    }
+    .service-kicker {
       display: none;
     }
+  }
 
-    .hero-phone {
-      right: -2%;
+  @media (max-width: 900px) {
+    .hero-shell {
+      padding-top: clamp(20px, 3dvh, 32px);
+    }
+    .hero-main {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 8px;
+      padding-block: 0 16px;
+    }
+    .hero-intro {
+      padding: 0;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      justify-content: center;
+      font-size: 10px;
+      margin-bottom: 17px;
+    }
+    .eyebrow-line {
+      display: none;
+    }
+    h1 {
+      font-size: clamp(55px, 8.1vw, 72px);
+      line-height: 1.2;
+      letter-spacing: -0.06em;
+    }
+    .headline-second {
+      padding-top: 2px;
+    }
+    .hero-english {
+      font-size: 16px;
+      margin-top: 14px;
+    }
+    .hero-aside {
+      margin-top: 20px;
+    }
+    .hero-sub {
+      font-size: 12px;
+      line-height: 1.85;
+    }
+    .hero-actions {
+      justify-content: center;
+      margin-top: 18px;
+      gap: 22px;
+    }
+    .hero-download {
+      min-width: 181px;
+    }
+    .hero-note {
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .hero-bottom {
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      min-height: 70px;
+      padding-block: 13px max(13px, env(safe-area-inset-bottom));
+    }
+    .hero-edition {
+      display: none;
+    }
+    .hero-service-note {
+      justify-self: start;
+    }
+    .hero-scroll > span:first-child {
+      display: none;
+    }
+    .service-kicker {
+      font-size: 6px;
+      margin-bottom: 7px;
+    }
+    .campus-services {
+      font-size: 9px;
+      gap: 11px;
+    }
+    .scroll-icon {
+      height: 31px;
+      width: 24px;
+    }
+  }
+  @media (max-width: 540px) {
+    .hero-shell {
+      padding-top: 21px;
+    }
+    .hero-main {
+      gap: 10px;
+      padding-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(48px, 12.2vw, 61px);
+    }
+    .hero-eyebrow {
+      font-size: 9px;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+    .hero-english {
+      font-size: 15px;
+      margin-top: 12px;
+    }
+    .hero-aside {
+      margin-top: 17px;
+    }
+    .hero-sub {
+      font-size: 11px;
+    }
+    .hero-sub > br:first-child {
+      display: none;
+    }
+    .mobile-copy-break {
+      display: block;
+    }
+    .hero-actions {
+      margin-top: 17px;
+      gap: 20px;
+    }
+    .hero-actions .btn {
+      font-size: 12px;
+      padding: 12px 17px;
+      min-height: 44px;
+    }
+    .hero-download {
+      min-width: 176px;
+      gap: 17px;
+    }
+    .hero-source {
+      font-size: 10px;
+      gap: 6px;
+    }
+    .hero-note {
+      font-size: 8px;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .hero-bottom {
+      min-height: 62px;
+    }
+    .emphasis-leaf {
+      top: -9px;
+      right: 1px;
+    }
+    .emphasis-leaf :global(svg) {
+      width: 19px;
+      height: 19px;
+    }
+  }
+  @media (max-width: 375px) {
+    h1 {
+      font-size: 45px;
+    }
+    .hero-source > :global(svg:last-child) {
+      display: none;
+    }
+    .hero-actions {
+      gap: 13px;
+    }
+    .hero-download {
+      min-width: 165px;
+    }
+    .hero-eyebrow {
+      font-size: 8px;
+    }
+  }
+  @media (max-width: 900px) and (max-height: 780px) {
+    .hero-shell {
+      padding-top: 17px;
+    }
+    .hero-main {
+      gap: 9px;
+      padding-bottom: 8px;
+    }
+    h1 {
+      font-size: 51px;
+    }
+    .hero-eyebrow {
+      margin-bottom: 12px;
+    }
+    .hero-english {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .hero-aside {
+      margin-top: 15px;
+    }
+    .hero-actions {
+      margin-top: 15px;
+    }
+    .hero-bottom {
+      min-height: 57px;
+      padding-block: 10px;
+    }
+    .hero-note {
+      margin-top: 9px;
+    }
+  }
+  @media (max-width: 900px) and (max-height: 680px) {
+    .hero-shell {
+      padding-top: 12px;
+    }
+    .hero-main {
+      gap: 5px;
+      padding-bottom: 5px;
+    }
+    h1 {
+      font-size: 44px;
+    }
+    .hero-eyebrow {
+      margin-bottom: 10px;
+      font-size: 8px;
+    }
+    .hero-english {
+      font-size: 13px;
+      margin-top: 7px;
+    }
+    .hero-aside {
+      margin-top: 12px;
+    }
+    .hero-sub {
+      font-size: 10px;
+      line-height: 1.75;
+    }
+    .hero-actions {
+      margin-top: 12px;
+    }
+    .hero-note {
+      margin-top: 8px;
+    }
+    .hero-bottom {
+      min-height: 50px;
+      padding-block: 8px;
+    }
+    .service-kicker {
+      display: none;
+    }
+    .hero-actions .btn {
+      min-height: 41px;
+      padding-block: 10px;
+    }
+  }
+  @media (max-width: 900px) and (max-height: 590px) {
+    h1 {
+      font-size: 39px;
+    }
+    .hero-eyebrow {
+      margin-bottom: 8px;
+    }
+    .hero-english {
+      display: none;
+    }
+    .hero-aside {
+      margin-top: 12px;
+    }
+    .hero-main {
+      gap: 3px;
+    }
+    .hero-sub {
+      font-size: 9px;
+    }
+    .hero-bottom {
+      min-height: 43px;
+    }
+    .hero-note {
+      font-size: 7px;
+    }
+  }
+  @media (min-width: 761px) and (max-width: 900px) and (min-height: 561px) and (max-height: 900px) {
+    .hero-main {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 8px;
+    }
+    .hero-intro {
+      text-align: left;
+    }
+    .hero-eyebrow,
+    .hero-actions,
+    .hero-note {
+      justify-content: flex-start;
+    }
+    h1 {
+      font-size: 54px;
+    }
+    .hero-eyebrow {
+      font-size: 8px;
+    }
+    .hero-sub {
+      font-size: 11px;
+    }
+    .hero-actions {
+      gap: 15px;
+    }
+    .hero-download {
+      min-width: 169px;
+    }
+    .hero-actions .btn {
+      font-size: 11px;
+      padding-inline: 16px;
+    }
+    .hero-english {
+      font-size: 16px;
+    }
+  }
+  @media (orientation: landscape) and (max-width: 900px) and (max-height: 560px) {
+    .hero-shell {
+      padding-top: 9px;
+    }
+    .hero-main {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 0;
+      padding-block: 0 5px;
+      min-height: 250px;
+    }
+    .hero-intro {
+      text-align: left;
+    }
+    .hero-eyebrow,
+    .hero-actions,
+    .hero-note {
+      justify-content: flex-start;
+    }
+    h1 {
+      font-size: 38px;
+    }
+    .hero-eyebrow {
+      font-size: 7px;
+      margin-bottom: 10px;
+    }
+    .hero-aside {
+      margin-top: 13px;
+    }
+    .hero-sub {
+      font-size: 9px;
+    }
+    .hero-sub > br:first-child {
+      display: none;
+    }
+    .hero-actions {
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .hero-actions .btn {
+      font-size: 10px;
+      min-height: 35px;
+      padding: 8px 12px;
+    }
+    .hero-download {
+      min-width: 150px;
+      gap: 10px;
+    }
+    .hero-source {
+      font-size: 9px;
+    }
+    .hero-source > :global(svg:last-child) {
+      display: none;
+    }
+    .hero-note {
+      font-size: 7px;
+      margin-top: 7px;
+    }
+    .hero-english {
+      display: none;
+    }
+    .hero-bottom {
+      min-height: 41px;
+      padding-block: 7px;
+    }
+    .service-kicker {
+      display: none;
+    }
+    .campus-services {
+      font-size: 8px;
+    }
+    .scroll-icon {
+      width: 21px;
+      height: 26px;
+    }
+  }
+  @media (orientation: landscape) and (max-width: 900px) and (max-height: 360px) {
+    .hero-shell {
+      padding-top: 6px;
+    }
+    .hero-main {
+      min-height: 0;
+      padding-bottom: 3px;
+    }
+    h1 {
+      font-size: 31px;
+    }
+    .hero-eyebrow {
+      margin-bottom: 7px;
+      font-size: 6px;
+    }
+    .hero-aside {
+      margin-top: 8px;
+    }
+    .hero-sub {
+      font-size: 8px;
+      line-height: 1.6;
+    }
+    .hero-actions {
+      margin-top: 9px;
+      gap: 10px;
+    }
+    .hero-actions .btn {
+      min-height: 31px;
+      padding-block: 6px;
+      font-size: 9px;
+    }
+    .hero-download {
+      min-width: 138px;
+    }
+    .hero-source {
+      font-size: 8px;
+    }
+    .hero-source > :global(svg) {
+      width: 13px;
+      height: 13px;
+    }
+    .hero-note {
+      margin-top: 5px;
+      font-size: 6px;
+    }
+    .hero-bottom {
+      min-height: 34px;
+      padding-block: 5px;
+    }
+    .scroll-icon {
+      width: 18px;
+      height: 22px;
     }
   }
 </style>

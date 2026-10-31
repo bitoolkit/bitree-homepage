@@ -1,5 +1,6 @@
 ---
 // FAQ 折叠条目：原生 <details>/<summary>，天然支持键盘与读屏。
+import Icon from './Icon.astro';
 interface Props {
   q: string;
 }
@@ -9,9 +10,7 @@ const { q } = Astro.props;
 <details class="faq-item">
   <summary>
     <span>{q}</span>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="m6 9.5 6 6 6-6" />
-    </svg>
+    <Icon name="chevron-down" size={16} />
   </summary>
   <div class="faq-body">
     <slot />
@@ -53,13 +52,15 @@ const { q } = Astro.props;
     outline-offset: -2px;
   }
 
-  summary svg {
+  summary :global(svg) {
     flex: none;
     color: var(--text-3);
-    transition: transform 0.22s var(--ease), color 0.22s var(--ease);
+    transition:
+      transform 0.22s var(--ease),
+      color 0.22s var(--ease);
   }
 
-  .faq-item[open] summary svg {
+  .faq-item[open] summary :global(svg) {
     transform: rotate(180deg);
     color: var(--brand);
   }

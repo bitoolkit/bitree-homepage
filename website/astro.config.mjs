@@ -9,11 +9,13 @@
 // import.meta.env.BASE_URL 生成，无需改动任何页面。
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
+import { iconSets } from './src/icons/catalog.mjs';
 
 export default defineConfig({
   site: 'https://bitoolkit.github.io',
   base: '/bitree-homepage',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
-  integrations: [sitemap()],
+  integrations: [sitemap(), icon({ include: iconSets })],
 });

@@ -43,6 +43,7 @@ GitHub Pages（也可手动触发）。仓库 Settings → Pages 需选择 **Git
 
 - 外链与平台定义集中在 [`src/config.ts`](src/config.ts)（仓库地址、Releases、Issues、
   各平台安装包格式与说明）；
+- 安全与隐私说明须先拉取应用最新源码，再核对实际实现；已核对提交、事实和来源链接维护在 [`src/data/privacy.ts`](src/data/privacy.ts)，详细证据与限制见 [`docs/privacy-evidence.md`](docs/privacy-evidence.md)。不能把“本地优先”扩大为“完全不联网、没有任何第三方登录、所有数据均加密”的承诺；
 - 应用内配色（楼宇 / 日程来源）定义在 `src/styles/global.css` 的 `--bld-*`、`--src-*`，
   与应用 `tool/building_palette.py` 生成的调色板对应，改配色请两边同步。
 

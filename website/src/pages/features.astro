@@ -11,18 +11,20 @@ import MockSimulate from '../components/mocks/MockSimulate.astro';
 import MockCredits from '../components/mocks/MockCredits.astro';
 import MockWidget from '../components/mocks/MockWidget.astro';
 import { BASE, PLATFORMS, LINKS } from '../config';
+import { PRIVACY_POINTS, PRIVACY_BOUNDARIES, PRIVACY_REVIEW, privacySource } from '../data/privacy';
 
 
 const groups = [
   { id: 'schedule', kicker: '01', title: '课程与日程', desc: '每一天的安排，从上课到考试，都摊在同一张清晰的时间线上。' },
   { id: 'academics', kicker: '02', title: '学业管理', desc: '成绩同步之后，绩点、学分与规划自动就位。' },
   { id: 'experience', kicker: '03', title: '体验与辅助', desc: '跨平台一致的细节能力，按你的使用方式出现。' },
+  { id: 'privacy', kicker: '04', title: '安全性与隐私', desc: '数据放在哪里，账号怎么登录，哪些操作会联网，都说明白。' },
 ];
 ---
 
 <Base
   title="功能"
-  description="BITree 理枝功能详解：课表、日程与 DDL、空教室、成绩绩点、成绩试算、毕业学分进度、考试冲突检查与 Android 小组件。"
+  description="BITree 理枝功能详解：课表、DDL、空教室、成绩与学分，以及安全性与隐私。本地数据、系统安全存储、直连平台、日志与联网边界均有源码依据。"
 >
   <div class="container">
     <header class="page-head reveal">
@@ -33,6 +35,9 @@ const groups = [
         数据保存在本机。<a href={`${BASE}download/`}>立即下载</a> 或返回
         <a href={LINKS.repo} target="_blank" rel="noopener">GitHub 仓库</a>。
       </p>
+      <nav class="feature-nav" aria-label="功能分类">
+        {groups.map((group) => <a href={`#g-${group.id}`}>{group.title}<Icon name="arrow-right" size={13} /></a>)}
+      </nav>
     </header>
 
     <!-- 01 课程与日程 -->
@@ -211,6 +216,33 @@ const groups = [
         </div>
       </div>
     </section>
+
+    <!-- 04 安全性与隐私：以固定提交的实际实现为依据，不扩大为绝对安全承诺。 -->
+    <section class="group privacy-group" aria-labelledby="g-privacy" id="privacy-details">
+      <div class="group-head reveal">
+        <span class="group-no">{groups[3].kicker}</span>
+        <div>
+          <h2 id="g-privacy">{groups[3].title}</h2>
+          <p>{groups[3].desc}</p>
+        </div>
+      </div>
+      <div class="privacy-intro reveal">
+        <span class="privacy-symbol"><Icon name="lock" size={23} /></span>
+        <div><h3>学校服务的第三方客户端，不是另一个数据平台。</h3><p>理枝在你的设备上接入学校与可选的中国大学 MOOC 服务，不要求注册理枝账号，也不设置收集课表、成绩或登录凭据的自建后台。本地保存不代表应用完全不联网，具体范围如下。</p></div>
+      </div>
+      <div class="privacy-grid">
+        {PRIVACY_POINTS.map((point) => <article class="privacy-card reveal">
+          <span class="privacy-card-icon"><Icon name={point.icon} size={21} /></span>
+          <h3>{point.title}</h3><p>{point.description}</p>
+          <a class="privacy-evidence" href={privacySource(point.source)} target="_blank" rel="noopener">{point.sourceLabel}<Icon name="external" size={12} /></a>
+        </article>)}
+      </div>
+      <aside class="privacy-boundaries reveal" aria-labelledby="privacy-boundaries-title">
+        <div class="boundary-title"><Icon name="alert" size={19} /><h3 id="privacy-boundaries-title">也把这些边界告诉你</h3></div>
+        <div class="boundary-grid">{PRIVACY_BOUNDARIES.map((item) => <div><h4>{item.title}</h4><p>{item.description}</p><a class="privacy-evidence" href={privacySource(item.source)} target="_blank" rel="noopener">{item.sourceLabel}<Icon name="external" size={12} /></a></div>)}</div>
+      </aside>
+      <p class="privacy-review reveal">本节描述理枝客户端的当前实现，不替学校、MOOC 或 GitHub 作出隐私承诺，也不等同于独立安全审计。依据 <a href={privacySource('README.md')} target="_blank" rel="noopener">README</a> 与 <a href={privacySource('docs/architecture.md')} target="_blank" rel="noopener">架构文档</a>及源码核对；核对日期 <time datetime={PRIVACY_REVIEW.checkedAt}>{PRIVACY_REVIEW.checkedAt}</time>，提交 <a href={`${LINKS.repo}/commit/${PRIVACY_REVIEW.revision}`} target="_blank" rel="noopener"><code>{PRIVACY_REVIEW.revision.slice(0, 7)}</code></a>。</p>
+    </section>
   </div>
 </Base>
 
@@ -375,7 +407,34 @@ const groups = [
     line-height: 1.7;
   }
 
+  .feature-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .feature-nav a { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-s); color: var(--text-2); font-size: 0.8125rem; background: var(--surface); }
+  .feature-nav a:hover { color: var(--brand); border-color: var(--brand-line); }
+  .group-head h2 { scroll-margin-top: calc(var(--header-h) + 24px); }
+  .privacy-intro { display: flex; align-items: flex-start; gap: 18px; padding: 24px; border: 1px solid var(--brand-line); border-radius: var(--radius); background: var(--brand-soft); margin-bottom: 20px; }
+  .privacy-symbol, .privacy-card-icon { color: var(--brand); display: inline-flex; flex: none; }
+  .privacy-symbol { padding-top: 2px; }
+  .privacy-intro h3 { font-size: 1.1rem; }
+  .privacy-intro p { color: var(--text-2); margin-top: 9px; line-height: 1.85; font-size: 0.9rem; }
+  .privacy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .privacy-card { display: flex; flex-direction: column; padding: 25px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .privacy-card-icon { margin-bottom: 18px; }
+  .privacy-card h3 { font-size: 1rem; line-height: 1.6; }
+  .privacy-card p, .boundary-grid p { margin-top: 10px; font-size: 0.875rem; line-height: 1.9; color: var(--text-2); }
+  .privacy-evidence { display: inline-flex; align-items: center; gap: 6px; color: var(--brand); font-size: 0.75rem; padding-top: 19px; margin-top: auto; }
+  .privacy-boundaries { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 27px; margin-top: 24px; }
+  .boundary-title { display: flex; align-items: center; gap: 10px; }
+  .boundary-title > :global(svg) { color: var(--amber); flex: none; }
+  .boundary-title h3 { font-size: 1.05rem; }
+  .boundary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; margin-top: 24px; }
+  .boundary-grid > div { min-width: 0; }
+  .boundary-grid h4 { font-size: 0.9rem; font-weight: 600; }
+  .privacy-review { font-size: 0.75rem; line-height: 1.9; color: var(--text-2); margin-top: 20px; }
+  .privacy-review a { text-decoration: underline; text-underline-offset: 3px; }
+  .privacy-review code { font-family: var(--font-mono); }
+
   @media (max-width: 920px) {
+    .privacy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .feat {
       grid-template-columns: 1fr;
     }
@@ -394,6 +453,12 @@ const groups = [
   }
 
   @media (max-width: 560px) {
+    .privacy-grid, .boundary-grid { grid-template-columns: 1fr; }
+    .privacy-intro { padding: 20px; gap: 12px; }
+    .privacy-intro h3 { font-size: 1rem; }
+    .privacy-card, .privacy-boundaries { padding: 22px; }
+    .feature-nav { gap: 8px; }
+    .feature-nav a { padding: 7px 9px; font-size: 0.75rem; }
     .mini-grid {
       grid-template-columns: 1fr;
     }

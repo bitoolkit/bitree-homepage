@@ -1,0 +1,924 @@
+---
+import Icon from './Icon.astro';
+import { BASE } from '../config';
+
+const navigation = [
+  { icon: 'calendar', label: '课程表', active: true },
+  { icon: 'clock', label: '日程与 DDL' },
+  { icon: 'chart', label: '成绩与绩点' },
+  { icon: 'door', label: '空教室' },
+];
+const days = [
+  { label: '周一', date: '19' },
+  { label: '周二', date: '20' },
+  { label: '周三', date: '21' },
+  { label: '周四', date: '22' },
+  { label: '周五', date: '23' },
+];
+const courses = [
+  {
+    day: 1,
+    slot: 1,
+    title: '高等数学',
+    room: '综教 B-202',
+    time: '08:00 – 09:35',
+    color: 'blue',
+  },
+  {
+    day: 1,
+    slot: 2,
+    title: '数据结构',
+    room: '文萃 F-210',
+    time: '09:55 – 11:30',
+    color: 'green',
+  },
+  {
+    day: 2,
+    slot: 2,
+    title: '大学英语',
+    room: '文萃 F-305',
+    time: '09:55 – 11:30',
+    color: 'green',
+  },
+  {
+    day: 2,
+    slot: 3,
+    title: '物理实验',
+    room: '南区实验楼',
+    time: '13:20 – 14:55',
+    color: 'amber',
+  },
+  {
+    day: 3,
+    slot: 1,
+    title: '线性代数',
+    room: '综教 A-101',
+    time: '08:00 – 09:35',
+    color: 'blue',
+  },
+  {
+    day: 3,
+    slot: 3,
+    title: '思想道德与法治',
+    room: '综教 B-105',
+    time: '13:20 – 14:55',
+    color: 'blue',
+  },
+  {
+    day: 4,
+    slot: 1,
+    title: '大学物理',
+    room: '南区理科楼',
+    time: '08:00 – 09:35',
+    color: 'amber',
+  },
+  {
+    day: 4,
+    slot: 2,
+    title: '数据结构',
+    room: '文萃 F-210',
+    time: '09:55 – 11:30',
+    color: 'green',
+    current: true,
+  },
+  {
+    day: 5,
+    slot: 2,
+    title: '体育',
+    room: '体育中心',
+    time: '09:55 – 11:30',
+    color: 'neutral',
+  },
+  {
+    day: 5,
+    slot: 4,
+    title: '大学英语',
+    room: '文萃 F-305',
+    time: '15:15 – 16:50',
+    color: 'green',
+  },
+];
+---
+
+<div
+  class="campus-app"
+  role="img"
+  aria-label="BITree 界面示意：左侧功能导航，中间为第八周课表，右侧展示今日课程与待办。课程和日期均为示例数据。"
+>
+  <div class="app-titlebar">
+    <span class="window-dots"><i></i><i></i><i></i></span><span
+      >BITree 理枝</span
+    ><span class="preview-label">界面示意 · 非真实数据</span>
+  </div>
+  <div class="app-workspace">
+    <aside class="app-sidebar" aria-hidden="true">
+      <div class="app-brand">
+        <img src={`${BASE}favicon.svg`} width="27" height="27" alt="" /><span
+          >理枝<span>BITree</span></span
+        >
+      </div>
+      <p class="sidebar-caption">我的校园</p>
+      <div class="app-navigation">
+        {
+          navigation.map((item) => (
+            <span class:list={['app-nav-item', { active: item.active }]}>
+              <Icon name={item.icon} size={15} />
+              {item.label}
+              {item.active && <i />}
+            </span>
+          ))
+        }
+      </div>
+      <div class="sidebar-bottom">
+        <span class="local-dot"></span> 数据已保存在本机<Icon
+          name="lock"
+          size={12}
+        />
+      </div>
+    </aside>
+    <div class="app-main" aria-hidden="true">
+      <div class="app-heading">
+        <div>
+          <p class="app-greeting">每一天，都有条有理</p><h2>
+            这周，也从容一点。<span><Icon name="sun" size={21} /></span>
+          </h2>
+        </div><span class="semester">2026 秋季学期</span>
+      </div>
+      <div class="schedule-heading">
+        <div>
+          <Icon name="calendar" size={16} /><b>我的课表</b><span
+            class="week-badge">第 8 周</span
+          >
+        </div><span class="week-control"
+          ><Icon name="chevron-left" size={10} /><span>10.19 — 10.23</span><Icon
+            name="chevron-right"
+            size={10}
+          /></span
+        >
+      </div>
+      <div class="schedule-grid">
+        <span class="grid-corner">10 月</span>
+        {
+          days.map((day, index) => (
+            <div
+              class:list={['day-heading', { today: index === 3 }]}
+              style={`grid-column:${index + 2};grid-row:1`}
+            >
+              <>
+                <span>{day.label}</span>
+                <b>{day.date}</b>
+              </>
+            </div>
+          ))
+        }
+        {
+          ['08:00', '09:55', '13:20', '15:15'].map((time, index) => (
+            <span
+              class="time-label"
+              style={`grid-column:1;grid-row:${index + 2}`}
+            >
+              {time}
+              <i>
+                {String(index * 2 + 1).padStart(2, '0')} –{' '}
+                {String(index * 2 + 2).padStart(2, '0')}
+              </i>
+            </span>
+          ))
+        }
+        {
+          days.map((_, day) =>
+            Array.from({ length: 4 }, (_, slot) => (
+              <span
+                class="grid-cell"
+                style={`grid-column:${day + 2};grid-row:${slot + 2}`}
+              />
+            )),
+          )
+        }
+        {
+          courses.map((course) => (
+            <div
+              class:list={['course', course.color, { current: course.current }]}
+              style={`grid-column:${course.day + 1};grid-row:${course.slot + 1}`}
+            >
+              <b>{course.title}</b>
+              <span>{course.room}</span>
+              <small>{course.time}</small>
+              {course.current && (
+                <span class="now-indicator">
+                  正在上课 <i />
+                </span>
+              )}
+            </div>
+          ))
+        }
+      </div>
+      <div class="schedule-legend">
+        <span><i class="legend-blue"></i>综教</span><span
+          ><i class="legend-green"></i>文萃</span
+        ><span><i class="legend-amber"></i>南区</span><span class="legend-tip"
+          >属于你的每一周，清晰可见。</span
+        >
+      </div>
+    </div>
+    <aside class="app-today" aria-hidden="true">
+      <div class="today-heading">
+        <span>今天 · 周四</span><Icon name="sun" size={16} />
+      </div>
+      <div class="next-class">
+        <span class="next-label"><i></i> 正在进行</span><h3>数据结构</h3><p>
+          09:55 — 11:30
+        </p><span class="class-location"
+          ><Icon name="door" size={12} /> 文萃 F-210</span
+        ><div class="class-progress"><span></span></div><small
+          >专注当下，慢慢来。</small
+        >
+      </div>
+      <div class="todo-heading"><b>接下来要做</b><span>02</span></div>
+      <div class="todo-item">
+        <span class="todo-ring"></span><div>
+          <b>数据结构 · 实验报告</b><p>
+            <span class="todo-source">乐学</span> 今天 23:59
+          </p>
+        </div>
+      </div>
+      <div class="todo-item">
+        <span class="todo-ring"></span><div>
+          <b>物理实验 · 预习</b><p>
+            <span class="todo-source purple">实验</span> 明天 13:20
+          </p>
+        </div>
+      </div>
+      <div class="today-bottom">
+        <Icon name="leaf" size={16} /><span>安排妥当，心里有数。</span>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<style>
+  .campus-app {
+    --ui-bg: #fff;
+    --ui-text: #293e34;
+    --ui-muted: #7e8982;
+    background: var(--ui-bg);
+    border: 1px solid #d9e2d9;
+    border-radius: 12px;
+    color: var(--ui-text);
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.5;
+    color-scheme: light;
+  }
+  .app-titlebar {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    border-bottom: 1px solid #e9ede8;
+    background: #fafbf8;
+    color: #606860;
+    font-size: 9px;
+  }
+  .window-dots {
+    display: flex;
+    gap: 5px;
+    width: 127px;
+  }
+  .window-dots i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #dce1d8;
+  }
+  .window-dots i:first-child {
+    background: #ddad9d;
+  }
+  .window-dots i:nth-child(2) {
+    background: #e6d19d;
+  }
+  .window-dots i:last-child {
+    background: #adc6a8;
+  }
+  .preview-label {
+    font-size: 8px;
+    width: 127px;
+    text-align: right;
+  }
+  .app-workspace {
+    display: grid;
+    grid-template-columns: 151px minmax(0, 1fr) 188px;
+    min-height: 384px;
+  }
+  .app-sidebar {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #e9ede8;
+    padding: 24px 12px 16px;
+    background: #f9faf7;
+  }
+  .app-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding-left: 10px;
+  }
+  .app-brand > span {
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: 0.08em;
+  }
+  .app-brand > span > span {
+    display: block;
+    font: 8px var(--font-mono);
+    letter-spacing: 0.06em;
+    margin-top: 3px;
+    color: #5f6861;
+  }
+  .sidebar-caption {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: #60685e;
+    padding: 30px 10px 10px;
+  }
+  .app-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .app-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    font-size: 10px;
+    border-radius: 6px;
+    color: #5e6960;
+    white-space: nowrap;
+  }
+  .app-nav-item.active {
+    background: #e8eee3;
+    color: #426145;
+    font-weight: 600;
+  }
+  .app-nav-item i {
+    margin-left: auto;
+    width: 4px;
+    height: 4px;
+    background: #638b54;
+    border-radius: 50%;
+  }
+  .sidebar-bottom {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 7px;
+    margin-top: auto;
+    color: #5f695f;
+    padding-left: 8px;
+    padding-top: 24px;
+    white-space: nowrap;
+  }
+  .sidebar-bottom :global(svg) {
+    margin-left: auto;
+  }
+  .local-dot {
+    width: 4px;
+    height: 4px;
+    background: #81966d;
+    border-radius: 50%;
+  }
+  .app-main {
+    padding: 24px 22px 16px;
+    min-width: 0;
+  }
+  .app-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+  .app-greeting {
+    font-size: 8px;
+    color: #5f695f;
+    margin-bottom: 5px;
+  }
+  .app-heading h2 {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .app-heading h2 span {
+    display: inline-flex;
+    vertical-align: -3px;
+    font-size: 21px;
+    padding-left: 6px;
+    color: #83601b;
+    font-weight: 400;
+  }
+  .semester {
+    font-size: 7px;
+    color: #5e695f;
+    border: 1px solid #e5eae2;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .schedule-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 13px;
+  }
+  .schedule-heading > div {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .schedule-heading :global(svg) {
+    color: #586b52;
+  }
+  .schedule-heading b {
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .week-badge {
+    border-radius: 3px;
+    padding: 1px 5px;
+    background: #edf2e9;
+    color: #556c4c;
+    font-size: 7px;
+  }
+  .week-control {
+    display: inline-flex;
+    align-items: center;
+    color: #5d695f;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .week-control span {
+    font: 8px var(--font-mono);
+    margin: 0 5px;
+  }
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 34px repeat(5, minmax(0, 1fr));
+    grid-template-rows: 34px repeat(4, 53px);
+    gap: 4px;
+  }
+  .grid-corner {
+    display: flex;
+    align-items: center;
+    color: #60685f;
+    font-size: 8px;
+  }
+  .day-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 8px;
+    color: #5f695f;
+  }
+  .day-heading b {
+    font: 11px var(--font-mono);
+    color: #5a6a5a;
+  }
+  .day-heading.today b {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #486344;
+    color: white;
+    border-radius: 50%;
+    width: 21px;
+    height: 21px;
+  }
+  .time-label {
+    display: flex;
+    flex-direction: column;
+    padding-top: 4px;
+    gap: 4px;
+    font: 8px var(--font-mono);
+    color: #5d6a5d;
+  }
+  .time-label i {
+    font: 6px var(--font-mono);
+    color: #61695d;
+  }
+  .grid-cell {
+    border-top: 1px solid #f0f2ed;
+  }
+  .course {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1;
+    padding: 6px;
+    border-radius: 5px;
+    position: relative;
+    background: var(--course-bg);
+    color: var(--course-text);
+    border-top: 2px solid var(--course-accent);
+  }
+  .course b {
+    font-size: 8px;
+    line-height: 1.35;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .course > span {
+    font-size: 6px;
+    margin-top: 3px;
+    white-space: nowrap;
+  }
+  .course small {
+    margin-top: auto;
+    font: 5.5px var(--font-mono);
+    opacity: 1;
+    white-space: nowrap;
+  }
+  .blue {
+    --course-bg: #eaf0f7;
+    --course-text: #44698f;
+    --course-accent: #adc3dd;
+  }
+  .green {
+    --course-bg: #eaf0e6;
+    --course-text: #526e43;
+    --course-accent: #b9caa9;
+  }
+  .amber {
+    --course-bg: #f8f1e1;
+    --course-text: #7c6328;
+    --course-accent: #decd9f;
+  }
+  .neutral {
+    --course-bg: #f0eeeb;
+    --course-text: #6e655b;
+    --course-accent: #cfc8bf;
+  }
+  .course.current {
+    border: 1px solid #9aac88;
+    border-top-width: 2px;
+    background: #e1ead9;
+  }
+  .current small {
+    display: none;
+  }
+  .course .now-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 5.5px;
+    margin-top: auto;
+  }
+  .now-indicator i {
+    background: #839e69;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+  }
+  .schedule-legend {
+    display: flex;
+    gap: 12px;
+    font-size: 7px;
+    color: #61695b;
+    padding-top: 13px;
+    padding-left: 38px;
+  }
+  .schedule-legend > span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .schedule-legend i {
+    width: 5px;
+    height: 5px;
+    border-radius: 1px;
+  }
+  .legend-blue {
+    background: #adc3dd;
+  }
+  .legend-green {
+    background: #b9caa9;
+  }
+  .legend-amber {
+    background: #decd9f;
+  }
+  .legend-tip {
+    margin-left: auto;
+    font-size: 6px;
+  }
+  .app-today {
+    border-left: 1px solid #edf0e9;
+    padding: 24px 16px 18px;
+    background: #fdfdfb;
+    display: flex;
+    flex-direction: column;
+  }
+  .today-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #5e6a57;
+    font-size: 9px;
+  }
+  .today-heading :global(svg) {
+    color: #7b6321;
+  }
+  .next-class {
+    background: #f0f3e9;
+    padding: 14px 12px 11px;
+    margin-top: 14px;
+    border: 1px solid #e6eadb;
+    border-radius: 8px;
+  }
+  .next-label {
+    color: #5b6b46;
+    font-size: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .next-label i {
+    background: #8a9d6c;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+  }
+  .next-class h3 {
+    font-size: 13px;
+    margin-top: 8px;
+    color: #4f6642;
+  }
+  .next-class p {
+    font: 8px var(--font-mono);
+    margin-top: 7px;
+    color: #5b6b4e;
+  }
+  .class-location {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 8px;
+    color: #5d6b4f;
+    font-size: 7px;
+  }
+  .class-progress {
+    background: #dfe6d3;
+    height: 3px;
+    border-radius: 3px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  .class-progress > span {
+    display: block;
+    background: #97ab7d;
+    width: 42%;
+    height: 100%;
+  }
+  .next-class small {
+    display: block;
+    margin-top: 6px;
+    font-size: 6px;
+    color: #606954;
+  }
+  .todo-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 23px;
+  }
+  .todo-heading b {
+    font-size: 9px;
+    font-weight: 550;
+    color: #5d6a57;
+  }
+  .todo-heading > span {
+    font: 8px var(--font-mono);
+    color: #62685a;
+  }
+  .todo-item {
+    display: flex;
+    gap: 7px;
+    align-items: flex-start;
+    margin-top: 13px;
+  }
+  .todo-ring {
+    border: 1px solid #cdd4c4;
+    border-radius: 3px;
+    width: 10px;
+    height: 10px;
+    margin-top: 2px;
+    flex: none;
+  }
+  .todo-item b {
+    font-size: 7px;
+    font-weight: 500;
+    color: #5f6a56;
+  }
+  .todo-item p {
+    font-size: 6px;
+    color: #626953;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 5px;
+  }
+  .todo-source {
+    color: #676a20;
+    font-size: 5px;
+    background: #f0f0de;
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+  .todo-source.purple {
+    background: #eeebf5;
+    color: #6f5f87;
+  }
+  .today-bottom {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    color: #606a52;
+    font-size: 7px;
+    margin-top: auto;
+    padding-top: 20px;
+  }
+  @media (min-width: 1350px) {
+    .app-workspace {
+      min-height: 420px;
+    }
+    .schedule-grid {
+      grid-template-rows: 34px repeat(4, 61px);
+    }
+    .course b {
+      font-size: 9px;
+    }
+    .course > span {
+      font-size: 7px;
+    }
+    .course small {
+      font-size: 6px;
+    }
+  }
+  @media (max-width: 1050px) {
+    .app-workspace {
+      grid-template-columns: 128px minmax(0, 1fr) 155px;
+    }
+    .app-main {
+      padding-inline: 15px;
+    }
+    .app-today {
+      padding-inline: 11px;
+    }
+    .app-nav-item {
+      padding-inline: 7px;
+      font-size: 9px;
+    }
+    .semester {
+      display: none;
+    }
+    .app-heading h2 {
+      font-size: 17px;
+    }
+    .legend-tip {
+      display: none;
+    }
+  }
+  @media (max-width: 760px) {
+    .app-workspace {
+      grid-template-columns: 106px minmax(0, 1fr);
+      min-height: 370px;
+    }
+    .app-today {
+      display: none;
+    }
+    .app-sidebar {
+      padding-inline: 7px;
+    }
+    .app-brand {
+      padding-left: 6px;
+      gap: 6px;
+    }
+    .app-brand > span {
+      font-size: 13px;
+    }
+    .app-brand img {
+      width: 23px;
+      height: 23px;
+    }
+    .app-nav-item {
+      font-size: 8px;
+      gap: 6px;
+    }
+    .sidebar-bottom {
+      font-size: 6px;
+      padding-left: 0;
+    }
+    .sidebar-bottom :global(svg) {
+      display: none;
+    }
+    .app-main {
+      padding: 21px 12px 14px;
+    }
+    .app-heading {
+      margin-bottom: 24px;
+    }
+    .preview-label {
+      font-size: 7px;
+    }
+    .window-dots {
+      width: 110px;
+    }
+  }
+  @media (max-width: 540px) {
+    .app-workspace {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: auto;
+    }
+    .app-sidebar {
+      display: none;
+    }
+    .app-titlebar {
+      height: 29px;
+      padding-inline: 10px;
+    }
+    .window-dots,
+    .preview-label {
+      width: 93px;
+    }
+    .preview-label {
+      font-size: 6px;
+    }
+    .app-titlebar > span:nth-child(2) {
+      font-size: 8px;
+    }
+    .window-dots i {
+      width: 5px;
+      height: 5px;
+    }
+    .app-main {
+      padding: 18px 10px 12px;
+    }
+    .app-heading {
+      margin-bottom: 18px;
+    }
+    .app-heading h2 {
+      font-size: 17px;
+    }
+    .app-greeting {
+      font-size: 7px;
+    }
+    .schedule-grid {
+      grid-template-columns: 27px repeat(5, minmax(0, 1fr));
+      grid-template-rows: 30px repeat(4, 55px);
+      gap: 3px;
+    }
+    .course {
+      padding: 5px 3px;
+    }
+    .course b {
+      font-size: 7px;
+      white-space: normal;
+      max-height: 19px;
+    }
+    .course > span {
+      font-size: 5.5px;
+    }
+    .course small {
+      font-size: 4.5px;
+    }
+    .schedule-legend {
+      padding-left: 30px;
+    }
+    .week-control span {
+      font-size: 7px;
+    }
+    .day-heading {
+      flex-direction: column;
+      gap: 2px;
+      font-size: 6px;
+    }
+    .day-heading b {
+      font-size: 10px;
+    }
+    .day-heading.today b {
+      width: 16px;
+      height: 16px;
+    }
+    .time-label {
+      font-size: 6px;
+    }
+    .time-label i {
+      font-size: 5px;
+    }
+  }
+</style>

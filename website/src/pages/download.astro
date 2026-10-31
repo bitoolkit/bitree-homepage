@@ -44,11 +44,6 @@ const formatMap: Record<PlatformId, string> = {
       <p>安装包来自 GitHub Releases，版本号与下载地址随发布自动更新，本页不维护任何硬编码版本。</p>
     </header>
 
-    <p class="detect-hint reveal" data-detect-hint hidden>
-      <Icon name="check" size={15} />
-      已识别你的系统为 <b data-detect-name></b>，已为你选中对应平台，你也可以手动切换。
-    </p>
-
     <div class="dl-layout reveal">
       <div class="dl-picker" role="tablist" aria-label="选择操作系统" data-dl-tabs>
         {
@@ -186,29 +181,10 @@ const formatMap: Record<PlatformId, string> = {
     color: var(--text-2);
   }
 
-  .detect-hint {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 18px;
-    padding: 10px 14px;
-    border-radius: var(--radius-s);
-    background: var(--brand-soft);
-    color: var(--text);
-    font-size: 0.875rem;
-    border: 1px solid var(--brand-line);
-  }
-
   /* display 规则会覆盖 UA 的 [hidden]，需显式兜底 */
-  .detect-hint[hidden],
   .dl-notice[hidden],
   .dl-size[hidden] {
     display: none;
-  }
-
-  .detect-hint svg {
-    color: var(--brand);
-    flex: none;
   }
 
   .dl-layout {
@@ -648,16 +624,10 @@ const formatMap: Record<PlatformId, string> = {
   });
 
   const detected = detectPlatform();
-  selectPlatform(detected);
-  const hint = document.querySelector<HTMLElement>('[data-detect-hint]');
-  const nameEl = hint?.querySelector<HTMLElement>('[data-detect-name]');
-  if (hint && nameEl) {
-    const tab = tabs.find((t) => t.dataset.platform === detected);
-    if (tab) {
-      nameEl.textContent = tab.textContent?.trim() ?? detected;
-      hint.hidden = false;
-    }
-  }
+  // 首页平台卡片可直达对应安装包，未指定时仍按设备自动选择。
+  const requested = new URLSearchParams(window.location.search).get('platform');
+  const initial = tabs.some((tab) => tab.dataset.platform === requested) ? requested! : detected;
+  selectPlatform(initial);
 
   const result = await fetchRelease();
   if (result) {

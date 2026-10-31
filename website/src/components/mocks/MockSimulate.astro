@@ -1,4 +1,6 @@
 ---
+import Icon from '../Icon.astro';
+
 // 成绩试算示意界面：添加拟修课程 → 试算累计绩点变化 / 倒推目标成绩。
 // 依据 README：不修改原成绩。
 ---
@@ -20,10 +22,7 @@
           <em>3.72</em>
           <span>当前累计</span>
         </div>
-        <svg width="26" height="14" viewBox="0 0 26 14" fill="none" aria-hidden="true">
-          <path d="M2 12 C 8 12, 14 2, 24 2" stroke="var(--bld-b)" stroke-width="1.8" stroke-linecap="round"/>
-          <path d="M19 2h5v5" stroke="var(--bld-b)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <span class="gpa-trend"><Icon name="trending-up" size={26} /></span>
         <div class="g new">
           <em>3.78</em>
           <span>试算结果</span>
@@ -70,6 +69,11 @@
     border: 1px solid #e9e7e0;
     border-radius: 10px;
     padding: 12px 14px;
+  }
+
+  .gpa-trend {
+    display: inline-flex;
+    color: var(--bld-b);
   }
 
   .gpa {

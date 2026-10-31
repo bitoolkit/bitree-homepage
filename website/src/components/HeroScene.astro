@@ -1,0 +1,651 @@
+---
+import Icon from './Icon.astro';
+import { BASE } from '../config';
+
+const week = [
+  { day: '一', date: '19', blocks: ['blue', 'green', 'empty'] },
+  { day: '二', date: '20', blocks: ['empty', 'green', 'sand'] },
+  { day: '三', date: '21', blocks: ['blue', 'empty', 'blue'] },
+  { day: '四', date: '22', blocks: ['sand', 'green', 'empty'], current: true },
+  { day: '五', date: '23', blocks: ['empty', 'blue', 'green'] },
+];
+---
+
+<figure
+  class="hero-scene"
+  aria-label="理枝功能示意：课程、待办和学业进度汇集在一起。日期、课程和绩点均为示例。"
+>
+  <div class="scene-canvas" aria-hidden="true">
+    <div class="scene-disc"></div>
+    <div class="scene-ring ring-outer"></div>
+    <div class="scene-ring ring-inner"></div>
+    <span class="scene-wordmark">a little more life.</span>
+    <span class="scene-coordinate"><span></span> YOUR CAMPUS, IN ORDER.</span>
+
+    <div class="planner-card">
+      <div class="planner-top">
+        <span
+          ><img src={`${BASE}favicon.svg`} width="22" height="22" alt="" /> 理枝
+          <i>/</i> 你的校园日常</span
+        ><Icon name="menu" size={16} />
+      </div>
+      <div class="planner-date">
+        <div><p>十月 · 星期四</p><h2>今天，也从容一点。</h2></div><span
+          >22<small>OCT.</small></span>
+      </div>
+      <div class="planner-week">
+        {
+          week.map((day) => (
+            <div class:list={['week-day', { current: day.current }]}>
+              <>
+                <span>周{day.day}</span>
+                <b>{day.date}</b>
+                <div class="week-blocks">
+                  {day.blocks.map((color) => (
+                    <i class={color} />
+                  ))}
+                </div>
+              </>
+            </div>
+          ))
+        }
+      </div>
+      <div class="current-lesson">
+        <div class="lesson-top">
+          <span><i></i> 下一节课</span><Icon name="calendar" size={15} />
+        </div><h3>数据结构</h3><p>
+          <span>09:55 — 11:30</span><span>文萃 F-210</span>
+        </p><div class="lesson-rule"></div><span class="lesson-bottom"
+          >课表到位，出门不慌。<Icon name="arrow-right" size={13} /></span>
+      </div>
+      <div class="planner-footer">
+        <span><Icon name="lock" size={11} /> 已保存在本机</span><span
+          >一周的安排，心里有数。</span>
+      </div>
+    </div>
+
+    <div class="deadline-ticket">
+      <div class="ticket-heading">
+        <span><Icon name="clock" size={14} /> DDL，不再突然出现。</span><span
+          >01</span>
+      </div><div class="ticket-task">
+        <span class="ticket-check"><Icon name="check" size={14} /></span><div>
+          <h3>数据结构 · 实验报告</h3><p><span>乐学</span> 今天 23:59</p>
+        </div>
+      </div><span class="ticket-bottom">留一点时间，给计划之外。</span>
+    </div>
+
+    <div class="growth-card">
+      <div><Icon name="chart" size={15} /><span>每一步，都算数。</span></div><p>
+        3.82<span> / 4.0</span>
+      </p><div class="growth-bars">
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+      </div><span class="growth-label">努力，正在慢慢生长。</span>
+    </div>
+    <span class="scene-leaf"><Icon name="leaf" size={25} /></span>
+    <span class="scene-note">把时间，留给你喜欢的事。</span>
+  </div>
+  <figcaption>功能界面示意 · 日期、课程与成绩均为示例</figcaption>
+</figure>
+
+<style>
+  .hero-scene {
+    --scene-scale: 1;
+    position: relative;
+    width: 100%;
+    height: clamp(390px, 64dvh, 610px);
+    margin: 0;
+    min-width: 0;
+  }
+  .scene-canvas {
+    position: absolute;
+    width: 540px;
+    height: 500px;
+    top: 49%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(var(--scene-scale));
+    transform-origin: center;
+  }
+  .scene-disc {
+    position: absolute;
+    width: 408px;
+    height: 408px;
+    border-radius: 50%;
+    background: var(--home-stage);
+    left: 66px;
+    top: 51px;
+  }
+  .scene-disc::after {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    background-image: radial-gradient(
+      var(--home-stage-line) 0.9px,
+      transparent 0.9px
+    );
+    background-size: 12px 12px;
+  }
+  .scene-ring {
+    position: absolute;
+    border: 1px solid var(--brand-line);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .ring-outer {
+    width: 500px;
+    height: 500px;
+    top: 0;
+    left: 20px;
+    opacity: 0.55;
+  }
+  .ring-inner {
+    width: 462px;
+    height: 462px;
+    top: 19px;
+    left: 39px;
+    border-style: dashed;
+    opacity: 0.5;
+  }
+  .scene-wordmark {
+    position: absolute;
+    left: 11px;
+    bottom: 8px;
+    font:
+      italic 37px/1 Georgia,
+      serif;
+    color: var(--brand-line);
+    transform: rotate(-7deg);
+    white-space: nowrap;
+  }
+  .scene-coordinate {
+    position: absolute;
+    top: 9px;
+    left: 98px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font: 8px var(--font-mono);
+    letter-spacing: 0.15em;
+    color: var(--text-3);
+  }
+  .scene-coordinate > span {
+    width: 4px;
+    height: 4px;
+    background: var(--brand);
+    border-radius: 50%;
+  }
+  .planner-card {
+    position: absolute;
+    left: 107px;
+    top: 27px;
+    width: 308px;
+    padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    box-shadow:
+      0 24px 60px rgb(32 61 40 / 0.12),
+      0 3px 8px rgb(32 61 40 / 0.04);
+    transform: rotate(-7deg);
+  }
+  .planner-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-3);
+  }
+  .planner-top > span {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 9px;
+  }
+  .planner-top img {
+    border-radius: 5px;
+  }
+  .planner-top i {
+    font-style: normal;
+    color: var(--line-2);
+    padding-inline: 2px;
+  }
+  .planner-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 23px;
+  }
+  .planner-date p {
+    color: var(--text-3);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+  .planner-date h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 1.5;
+    margin-top: 5px;
+  }
+  .planner-date > span {
+    font: 39px/0.95 var(--font-mono);
+    letter-spacing: -0.07em;
+    color: var(--brand);
+  }
+  .planner-date small {
+    display: block;
+    font: 8px var(--font-mono);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-top: 4px;
+    color: var(--text-3);
+  }
+  .planner-week {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+    padding: 17px 0;
+    margin-top: 8px;
+    border-block-end: 1px dashed var(--line);
+  }
+  .week-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+  }
+  .week-day > span {
+    color: var(--text-3);
+    font-size: 7px;
+  }
+  .week-day b {
+    display: grid;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    font: 12px var(--font-mono);
+    color: var(--text-2);
+    border-radius: 50%;
+  }
+  .week-day.current b {
+    background: var(--brand);
+    color: var(--brand-ink);
+  }
+  .week-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+    padding: 4px;
+    background: var(--surface-2);
+    border-radius: 4px;
+  }
+  .week-blocks i {
+    height: 7px;
+    border-radius: 2px;
+    background: var(--brand-line);
+  }
+  .week-blocks .blue {
+    background: var(--home-blue-line);
+  }
+  .week-blocks .sand {
+    background: color-mix(in srgb, var(--home-orange) 40%, var(--surface));
+  }
+  .week-blocks .empty {
+    background: transparent;
+  }
+  .current-lesson {
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    border-radius: 9px;
+    padding: 13px;
+    margin-top: 16px;
+  }
+  .lesson-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--brand);
+  }
+  .lesson-top > span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 8px;
+  }
+  .lesson-top i {
+    width: 4px;
+    height: 4px;
+    background: var(--brand);
+    border-radius: 50%;
+  }
+  .current-lesson h3 {
+    margin-top: 9px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .current-lesson p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    color: var(--text-2);
+    margin-top: 9px;
+  }
+  .current-lesson p > span:first-child {
+    font-family: var(--font-mono);
+  }
+  .lesson-rule {
+    height: 3px;
+    border-radius: 3px;
+    background: var(--brand-line);
+    margin-top: 13px;
+  }
+  .lesson-rule::before {
+    content: '';
+    display: block;
+    width: 38%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--brand);
+  }
+  .lesson-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--brand);
+    font-size: 7px;
+    margin-top: 8px;
+  }
+  .planner-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 14px;
+    font-size: 6px;
+    color: var(--text-3);
+  }
+  .planner-footer > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .deadline-ticket {
+    position: absolute;
+    left: 3px;
+    bottom: -3px;
+    width: 265px;
+    padding: 17px 18px 13px;
+    background: #f4e7c9;
+    border: 1px solid #e4d5b6;
+    border-radius: 7px;
+    color: #51492f;
+    box-shadow: 0 12px 35px rgb(71 57 28 / 0.1);
+    transform: rotate(5deg);
+  }
+  .deadline-ticket::before {
+    content: '';
+    width: 57px;
+    height: 18px;
+    background: rgb(255 254 241 / 0.65);
+    position: absolute;
+    top: -9px;
+    left: 100px;
+    transform: rotate(-8deg);
+  }
+  .ticket-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #ccbd9a;
+  }
+  .ticket-heading > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+  }
+  .ticket-heading > span:last-child {
+    font: 8px var(--font-mono);
+  }
+  .ticket-task {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    padding-block: 13px;
+  }
+  .ticket-check {
+    display: grid;
+    place-items: center;
+    height: 23px;
+    width: 23px;
+    border: 1px solid #c4b68e;
+    border-radius: 50%;
+    color: #665d3f;
+    flex: none;
+  }
+  .ticket-task h3 {
+    font-size: 12px;
+    font-weight: 550;
+    letter-spacing: -0.02em;
+  }
+  .ticket-task p {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    font-size: 8px;
+    color: #6e6242;
+    margin-top: 5px;
+  }
+  .ticket-task p span {
+    font-size: 6px;
+    background: #e9dab5;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .ticket-bottom {
+    font-size: 7px;
+    color: #706442;
+  }
+  .growth-card {
+    position: absolute;
+    top: 51px;
+    right: 0;
+    width: 150px;
+    padding: 15px 15px 13px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgb(32 61 40 / 0.07);
+    transform: rotate(9deg);
+  }
+  .growth-card > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--brand);
+    font-size: 8px;
+  }
+  .growth-card > p {
+    margin-top: 13px;
+    font: 32px/1.1 var(--font-mono);
+    letter-spacing: -0.07em;
+    color: var(--text);
+  }
+  .growth-card > p span {
+    font-size: 9px;
+    color: var(--text-3);
+    letter-spacing: 0;
+  }
+  .growth-bars {
+    display: flex;
+    align-items: end;
+    gap: 5px;
+    height: 44px;
+    padding-block: 8px;
+    margin-top: 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .growth-bars i {
+    flex: 1;
+    background: var(--brand-line);
+    height: 45%;
+    border-radius: 3px 3px 0 0;
+  }
+  .growth-bars i:nth-child(2) {
+    height: 58%;
+  }
+  .growth-bars i:nth-child(3) {
+    height: 51%;
+  }
+  .growth-bars i:nth-child(4) {
+    height: 75%;
+  }
+  .growth-bars i:nth-child(5) {
+    height: 83%;
+  }
+  .growth-bars i:last-child {
+    height: 100%;
+    background: var(--brand);
+  }
+  .growth-label {
+    display: block;
+    font-size: 6px;
+    margin-top: 7px;
+    color: var(--text-3);
+  }
+  .scene-leaf {
+    display: grid;
+    place-items: center;
+    width: 53px;
+    height: 53px;
+    position: absolute;
+    right: 24px;
+    bottom: 68px;
+    border: 1px solid var(--brand-line);
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+    transform: rotate(21deg);
+  }
+  .scene-note {
+    position: absolute;
+    right: 17px;
+    bottom: 29px;
+    color: var(--text-2);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    transform: rotate(-7deg);
+  }
+  figcaption {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 8px;
+    color: var(--text-3);
+    letter-spacing: 0.025em;
+  }
+  @media (min-width: 1500px) and (min-height: 800px) {
+    .hero-scene {
+      --scene-scale: 1.1;
+    }
+  }
+  @media (min-width: 901px) and (max-width: 1200px) {
+    .hero-scene {
+      --scene-scale: 0.82;
+    }
+  }
+  @media (min-width: 901px) and (max-height: 740px) {
+    .hero-scene {
+      --scene-scale: 0.78;
+      height: 400px;
+    }
+  }
+  @media (min-width: 901px) and (max-height: 600px) {
+    .hero-scene {
+      --scene-scale: 0.6;
+      height: 310px;
+    }
+  }
+  @media (max-width: 900px) {
+    .hero-scene {
+      --scene-scale: 0.7;
+      height: 355px;
+      max-width: 550px;
+      margin-inline: auto;
+    }
+    figcaption {
+      font-size: 7px;
+      bottom: -2px;
+    }
+  }
+  @media (max-width: 540px) {
+    .hero-scene {
+      --scene-scale: 0.62;
+      height: 315px;
+    }
+    .scene-canvas {
+      top: 48%;
+    }
+    figcaption {
+      font-size: 6px;
+    }
+  }
+  @media (max-width: 375px) {
+    .hero-scene {
+      --scene-scale: 0.56;
+      height: 285px;
+    }
+  }
+  @media (max-width: 900px) and (max-height: 780px) {
+    .hero-scene {
+      --scene-scale: 0.47;
+      height: 238px;
+    }
+  }
+  @media (max-width: 900px) and (max-height: 680px) {
+    .hero-scene {
+      --scene-scale: 0.42;
+      height: 212px;
+    }
+    .scene-coordinate {
+      display: none;
+    }
+  }
+  @media (max-width: 900px) and (max-height: 590px) {
+    .hero-scene {
+      --scene-scale: 0.37;
+      height: 190px;
+    }
+    .scene-note,
+    .scene-wordmark {
+      display: none;
+    }
+  }
+  @media (min-width: 761px) and (max-width: 900px) and (min-height: 561px) and (max-height: 900px) {
+    .hero-scene {
+      --scene-scale: 0.65;
+      height: 380px;
+    }
+  }
+  @media (orientation: landscape) and (max-width: 900px) and (max-height: 560px) {
+    .hero-scene {
+      --scene-scale: 0.45;
+      height: 240px;
+    }
+    figcaption {
+      bottom: 0;
+    }
+  }
+  @media (orientation: landscape) and (max-width: 900px) and (max-height: 360px) {
+    .hero-scene {
+      --scene-scale: 0.34;
+      height: 185px;
+    }
+  }
+</style>

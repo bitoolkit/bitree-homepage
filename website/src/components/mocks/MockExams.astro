@@ -1,4 +1,6 @@
 ---
+import Icon from '../Icon.astro';
+
 // 考试安排示意界面：考试列表 + 与课表的冲突检查结果。
 const exams = [
   { name: '大学物理 期中考试', time: '11-08 周日 14:00', room: '综教 A-305', ok: true },
@@ -30,7 +32,7 @@ const exams = [
             <span>{e.time.slice(e.time.indexOf(' ') + 1)} · {e.room}</span>
             {!e.ok && (
               <em>
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 4 2.8 19.5h18.4L12 4Z" stroke-linejoin="round"/><path d="M12 10v4.2" stroke-linecap="round"/></svg>
+                <Icon name="alert" size={9} />
                 与 1 场考试时间冲突
               </em>
             )}

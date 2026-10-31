@@ -212,6 +212,8 @@ svg {
 }
 
 .btn:hover {
+  /* 保持按钮前景色，避免全局 a:hover 将文字改成与按钮背景相同的颜色。 */
+  color: var(--btn-ink);
   transform: translateY(-1px);
   box-shadow: var(--shadow-m);
 }
@@ -241,11 +243,11 @@ svg {
   --btn-ink: var(--brand);
 }
 
-.btn .arr {
+.btn [data-icon='lucide:arrow-right'] {
   transition: transform 0.2s var(--ease);
 }
 
-.btn:hover .arr {
+.btn:hover [data-icon='lucide:arrow-right'] {
   transform: translateX(3px);
 }
 

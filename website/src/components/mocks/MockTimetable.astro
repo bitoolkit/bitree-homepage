@@ -1,4 +1,6 @@
 ---
+import Icon from '../Icon.astro';
+
 // 课表示意界面：按楼栋片区配色的周视图 + 当天时间线。
 // 配色与布局规则参考 BITree docs/ui-design.md（综教蓝 / 文萃绿 / 南区黄）。
 interface Course {
@@ -40,7 +42,7 @@ const periods = 6;
     <span class="spacer"></span>
     <span class="app-chip is-active">回到本周</span>
     <span class="app-icon-btn" aria-hidden="true">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4v14M7 20l-3-3.5M7 20l3-3.5M17 20V6M17 4l-3 3.5M17 4l3 3.5" stroke-linecap="round"/></svg>
+      <Icon name="sort-schedule" size={12} />
     </span>
   </div>
 
