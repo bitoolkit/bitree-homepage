@@ -88,6 +88,10 @@ const pageTitle = `${title} · ${SITE.name}`;
         { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      // 兜底：入场动画全部结束后强制显示 fade-up 元素，
+      // 防止动画被暂停或异常时内容停留在透明初始态
+      setTimeout(() => document.documentElement.classList.add('anim-done'), 1600);
     </script>
   </body>
 </html>
@@ -104,7 +108,7 @@ const pageTitle = `${title} · ${SITE.name}`;
     color: var(--brand-ink);
     font-weight: 600;
     font-size: 0.875rem;
-    transform: translateY(-48px);
+    transform: translateY(-120%);
     transition: transform 0.2s var(--ease);
   }
 

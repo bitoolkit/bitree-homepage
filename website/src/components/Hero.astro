@@ -3,13 +3,13 @@ import Icon from './Icon.astro';
 import BranchArt from './BranchArt.astro';
 import DevicePreview from './DevicePreview.astro';
 import MockTimetable from './mocks/MockTimetable.astro';
-import MockAgenda from './mocks/MockAgenda.astro';
+import MockAgendaList from './mocks/MockAgendaList.astro';
 import { BASE, LINKS } from '../config';
 
 ---
 
 <section class="hero">
-  <BranchArt class="hero-branch" />
+  <div class="hero-branch"><BranchArt /></div>
   <div class="container hero-grid">
     <div class="hero-copy">
       <p class="hero-tags fade-up">
@@ -44,12 +44,16 @@ import { BASE, LINKS } from '../config';
     </div>
 
     <div class="hero-devices fade-up" style="--reveal-delay: 200ms">
-      <DevicePreview variant="window" class="hero-window">
-        <MockTimetable />
-      </DevicePreview>
-      <DevicePreview variant="phone" class="hero-phone">
-        <MockAgenda />
-      </DevicePreview>
+      <div class="hero-window">
+        <DevicePreview variant="window">
+          <MockTimetable />
+        </DevicePreview>
+      </div>
+      <div class="hero-phone">
+        <DevicePreview variant="phone">
+          <MockAgendaList />
+        </DevicePreview>
+      </div>
     </div>
   </div>
 </section>
@@ -64,13 +68,18 @@ import { BASE, LINKS } from '../config';
       var(--bg);
   }
 
+  /* 包裹层属于本组件，scoped 定位才能命中；子组件样式用 :global 穿透 */
   .hero-branch {
     position: absolute;
     right: -60px;
     top: -40px;
     width: clamp(420px, 46vw, 660px);
+    pointer-events: none;
+  }
+
+  .hero-branch :global(svg) {
+    width: 100%;
     height: auto;
-    opacity: 0.85;
   }
 
   .hero-grid {
@@ -121,7 +130,7 @@ import { BASE, LINKS } from '../config';
     padding-bottom: clamp(36px, 5vw, 64px);
   }
 
-  .hero-window {
+  .hero-window :global(.device) {
     width: 100%;
   }
 
@@ -129,8 +138,13 @@ import { BASE, LINKS } from '../config';
     position: absolute;
     right: -4%;
     bottom: 0;
-    width: clamp(120px, 26%, 190px);
+    width: clamp(140px, 28%, 210px);
     animation: float 7s ease-in-out infinite;
+  }
+
+  .hero-phone :global(.device) {
+    width: 100%;
+    height: 100%;
   }
 
   @keyframes float {

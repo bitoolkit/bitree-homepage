@@ -29,12 +29,16 @@ import { BASE, PLATFORMS } from '../config';
       </div>
 
       <div class="stage-devices" aria-hidden="true">
-        <DevicePreview variant="window" class="stage-window">
-          <MockCredits />
-        </DevicePreview>
-        <DevicePreview variant="phone" ratio="9/16.2" class="stage-phone">
-          <MockWidget />
-        </DevicePreview>
+        <div class="stage-window">
+          <DevicePreview variant="window">
+            <MockCredits />
+          </DevicePreview>
+        </div>
+        <div class="stage-phone">
+          <DevicePreview variant="phone" ratio="9/16.2">
+            <MockWidget />
+          </DevicePreview>
+        </div>
       </div>
     </div>
 
@@ -42,7 +46,9 @@ import { BASE, PLATFORMS } from '../config';
       {
         PLATFORMS.map((p, i) => (
           <li class="reveal" style={`--reveal-delay: ${i * 70}ms`}>
-            <Icon name={p.id} size={22} class="p-icon" />
+            <span class="p-icon">
+              <Icon name={p.id} size={22} />
+            </span>
             <b>{p.name}</b>
             <span>{p.format.replace('（未签名）', '')}</span>
           </li>
@@ -78,7 +84,10 @@ import { BASE, PLATFORMS } from '../config';
 
   .stage-window {
     width: 86%;
-    margin-left: 0;
+  }
+
+  .stage-window :global(.device) {
+    width: 100%;
   }
 
   .stage-phone {
@@ -87,6 +96,11 @@ import { BASE, PLATFORMS } from '../config';
     bottom: 0;
     width: clamp(110px, 22%, 168px);
     animation: stage-float 8s ease-in-out infinite;
+  }
+
+  .stage-phone :global(.device) {
+    width: 100%;
+    height: 100%;
   }
 
   @keyframes stage-float {

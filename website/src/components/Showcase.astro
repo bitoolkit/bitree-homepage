@@ -1,7 +1,7 @@
 ---
 import DevicePreview from './DevicePreview.astro';
 import MockTimetable from './mocks/MockTimetable.astro';
-import MockAgenda from './mocks/MockAgenda.astro';
+import MockAgendaList from './mocks/MockAgendaList.astro';
 import MockGrades from './mocks/MockGrades.astro';
 import MockClassroom from './mocks/MockClassroom.astro';
 import MockExams from './mocks/MockExams.astro';
@@ -94,7 +94,7 @@ const tabs = [
             <DevicePreview variant="window"><MockTimetable /></DevicePreview>
           </div>
           <div class="panel" role="tabpanel" id="panel-agenda" aria-labelledby="tab-agenda" hidden>
-            <DevicePreview variant="phone" ratio="9/15.8"><MockAgenda /></DevicePreview>
+            <DevicePreview variant="phone" ratio="9/15.8"><MockAgendaList /></DevicePreview>
           </div>
           <div class="panel" role="tabpanel" id="panel-grades" aria-labelledby="tab-grades" hidden>
             <DevicePreview variant="window"><MockGrades /></DevicePreview>

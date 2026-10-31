@@ -1,0 +1,161 @@
+---
+// 日程「列表视图」示意：纵向条目 + 来源配色，适配窄手机预览。
+// 配色规则与 MockAgenda 一致（docs/architecture.md）。
+const items = [
+  {
+    kind: '考试',
+    color: 'var(--src-exam)',
+    title: '大学物理 期中考试',
+    time: '14:00 – 16:00 · 综教 A-305',
+  },
+  {
+    kind: '活动',
+    color: 'var(--bld-b)',
+    title: '社团招新策划',
+    time: '全天',
+  },
+  {
+    kind: '乐学',
+    color: 'var(--src-leyou)',
+    title: '数据结构 实验报告',
+    time: '23:59 截止',
+  },
+  {
+    kind: '新延河',
+    color: 'var(--src-yanhe)',
+    title: '大学英语 展示准备',
+    time: '22:00 截止',
+  },
+  {
+    kind: '大物实验',
+    color: 'var(--src-physics)',
+    title: '大物实验 预习报告',
+    time: '已完成',
+    done: true,
+  },
+];
+---
+
+<div class="app mock-agenda-list">
+  <div class="app-bar">
+    <div>
+      <div class="app-title">日程</div>
+      <div class="app-sub">10 月 31 日</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="app-chip is-active">全部</span>
+  </div>
+
+  <div class="app-body list">
+    <p class="group-label">今天 · 未完成 3 项</p>
+    {
+      items.map((it) => (
+        <div class:list={['item', { done: it.done }]} style={`--src: ${it.color}`}>
+          <i class="dot" />
+          <div class="what">
+            <b>{it.title}</b>
+            <span>{it.time}</span>
+          </div>
+          <em>{it.kind}</em>
+        </div>
+      ))
+    }
+    <p class="group-label dim">明天 · 2 项</p>
+    <div class="item next" style="--src: var(--src-exam)">
+      <i class="dot"></i>
+      <div class="what">
+        <b>高等数学 期中考试</b>
+        <span>18:30 · 综教 B-202</span>
+      </div>
+      <em>考试</em>
+    </div>
+  </div>
+</div>
+
+<style>
+  .list {
+    gap: 7px;
+  }
+
+  .group-label {
+    font-size: 9px;
+    font-weight: 650;
+    color: #8a887f;
+    padding-left: 2px;
+  }
+
+  .group-label.dim {
+    margin-top: 4px;
+    opacity: 0.75;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: var(--app-surface);
+    border: 1px solid #e9e7e0;
+    border-right: 2.5px solid var(--src);
+    border-radius: 9px;
+    padding: 8px 9px;
+  }
+
+  .item .dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--src);
+    margin-top: 4px;
+  }
+
+  .item .what {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .item b {
+    font-size: 10px;
+    font-weight: 650;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .item span {
+    font-size: 8.5px;
+    color: #8a887f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .item em {
+    margin-left: auto;
+    flex: none;
+    font-style: normal;
+    font-size: 7.5px;
+    font-weight: 640;
+    color: color-mix(in srgb, var(--src) 70%, #4d4b43);
+    background: color-mix(in srgb, var(--src) 12%, #fff);
+    border-radius: 5px;
+    padding: 1px 6px;
+    margin-top: 1px;
+  }
+
+  .item.done {
+    opacity: 0.55;
+  }
+
+  .item.done b {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  .item.next {
+    opacity: 0.8;
+  }
+</style>
